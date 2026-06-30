@@ -1,10 +1,6 @@
 ```markdown
 # 🎨 CHROMATIC · ESTUDIO PROFESIONAL DE COLOR
 
-![Version](https://img.shields.io/badge/version-2.0-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Platform](https://img.shields.io/badge/platform-web-orange)
-
 > Una herramienta profesional para diseñadores, artistas y creadores. Selecciona, explora y exporta colores con una ruleta cromática de 5 niveles y una base de datos de más de 1000 colores.
 
 ## ✨ Características Principales
@@ -149,7 +145,6 @@ Sube el archivo a cualquier servicio de hosting (GitHub Pages, Netlify, Vercel, 
 chromatic/
 ├── index.html          # Aplicación completa (todo en uno)
 ├── README.md           # Documentación
-└── LICENSE             # Licencia MIT
 ```
 
 ## 🔧 Personalización
@@ -271,4 +266,4 @@ Distribuido bajo la licencia MIT. Ver `LICENSE` para más información.
 ---
 
 **Hecho con 🎨 para creadores de todo el mundo**
-```
+```ALEJANDRO MENDIETA
