@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-    <title>CHROMATIC · ESTUDIO PROFESIONAL DE COLOR</title>
+    <title>CHROMATIC · Estudio Profesional de Color</title>
+    <meta name="description" content="Herramienta profesional para explorar, crear y exportar paletas de color con más de 1500 colores.">
+    <meta name="theme-color" content="#4361ee">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <style>
+        /* ===== RESET Y VARIABLES ===== */
         * {
             margin: 0;
             padding: 0;
@@ -27,6 +31,7 @@
             --radius: 20px;
             --shadow: 0 8px 30px rgba(0,0,0,0.05);
             --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
         }
 
         body.dark {
@@ -40,19 +45,28 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font);
             background: var(--bg);
             color: var(--text);
             transition: var(--transition);
             line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--surface-2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+        /* ===== APP ===== */
         .app {
             max-width: 1400px;
             margin: 0 auto;
             padding: 24px;
         }
 
+        /* ===== HEADER ===== */
         .header {
             display: flex;
             justify-content: space-between;
@@ -71,6 +85,7 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            letter-spacing: -0.5px;
         }
 
         .logo p {
@@ -97,6 +112,7 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
+            font-family: var(--font);
         }
 
         .icon-btn:hover {
@@ -106,6 +122,7 @@
             transform: translateY(-2px);
         }
 
+        /* ===== GRID ===== */
         .main-grid {
             display: grid;
             grid-template-columns: 1.2fr 0.8fr;
@@ -117,6 +134,7 @@
             .app { padding: 16px; }
         }
 
+        /* ===== CARDS ===== */
         .card {
             background: var(--surface);
             border-radius: var(--radius);
@@ -142,8 +160,10 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            letter-spacing: -0.3px;
         }
 
+        /* ===== WHEEL ===== */
         .wheel-section {
             text-align: center;
         }
@@ -184,8 +204,10 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
+            flex-shrink: 0;
         }
 
+        /* ===== SLIDERS ===== */
         .slider-group {
             margin-bottom: 20px;
         }
@@ -205,6 +227,7 @@
             border-radius: 10px;
             background: var(--surface-2);
             -webkit-appearance: none;
+            appearance: none;
         }
 
         input[type="range"]::-webkit-slider-thumb {
@@ -218,10 +241,21 @@
             box-shadow: 0 1px 3px rgba(0,0,0,0.2);
         }
 
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: var(--accent);
+            cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
         #hueSlider {
             background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
         }
 
+        /* ===== COLOR PREVIEW ===== */
         .color-preview {
             display: flex;
             align-items: center;
@@ -238,10 +272,12 @@
             border-radius: 16px;
             border: 3px solid var(--surface);
             box-shadow: var(--shadow);
+            flex-shrink: 0;
         }
 
         .color-info {
             flex: 1;
+            min-width: 0;
         }
 
         .color-name {
@@ -260,11 +296,12 @@
             background: var(--surface);
             padding: 4px 12px;
             border-radius: 20px;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             font-size: 0.7rem;
             display: inline-flex;
             align-items: center;
             gap: 6px;
+            word-break: break-all;
         }
 
         .copy-badge {
@@ -273,8 +310,17 @@
             cursor: pointer;
             color: var(--text-2);
             font-size: 0.7rem;
+            padding: 2px 4px;
+            border-radius: 4px;
+            transition: var(--transition);
         }
 
+        .copy-badge:hover {
+            background: var(--surface-2);
+            color: var(--text);
+        }
+
+        /* ===== PALETTE ===== */
         .palette-grid {
             display: flex;
             gap: 12px;
@@ -291,6 +337,7 @@
             cursor: pointer;
             border: 2px solid var(--border);
             transition: var(--transition);
+            flex-shrink: 0;
         }
 
         .palette-item:hover {
@@ -321,6 +368,7 @@
             opacity: 1;
         }
 
+        /* ===== HARMONY ===== */
         .harmony-grid {
             display: flex;
             gap: 12px;
@@ -335,6 +383,7 @@
             cursor: pointer;
             border: 2px solid var(--border);
             transition: var(--transition);
+            flex-shrink: 0;
         }
 
         .harmony-swatch:hover {
@@ -358,6 +407,7 @@
             cursor: pointer;
             font-size: 0.7rem;
             transition: var(--transition);
+            font-family: var(--font);
         }
 
         .harmony-btn.active {
@@ -366,6 +416,7 @@
             border-color: var(--accent);
         }
 
+        /* ===== CONTRAST ===== */
         .contrast-row {
             display: flex;
             gap: 16px;
@@ -384,22 +435,23 @@
             font-weight: 700;
         }
 
+        /* ===== GRADIENTE ===== */
         .gradient-preview {
             height: 80px;
             border-radius: 16px;
             margin: 16px 0;
-            background: linear-gradient(135deg, #ff0000, #0000ff);
         }
 
         .gradient-code {
             background: var(--surface-2);
             padding: 12px;
             border-radius: 12px;
-            font-family: monospace;
+            font-family: 'Courier New', monospace;
             font-size: 0.7rem;
             word-break: break-all;
         }
 
+        /* ===== BOTONES ===== */
         .btn {
             padding: 10px 20px;
             border: none;
@@ -408,6 +460,7 @@
             font-size: 0.85rem;
             cursor: pointer;
             transition: var(--transition);
+            font-family: var(--font);
         }
 
         .btn-primary {
@@ -426,6 +479,10 @@
             border: 1px solid var(--border);
         }
 
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
         .btn-group {
             display: flex;
             gap: 12px;
@@ -433,6 +490,7 @@
             margin: 16px 0;
         }
 
+        /* ===== STATS ===== */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -458,6 +516,7 @@
             color: var(--text-2);
         }
 
+        /* ===== TOAST ===== */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -470,6 +529,7 @@
             font-size: 0.85rem;
             z-index: 2000;
             animation: slideUp 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
 
         @keyframes slideUp {
@@ -477,14 +537,17 @@
             to { opacity: 1; transform: translateX(-50%) translateY(0); }
         }
 
+        /* ===== EMPTY STATE ===== */
         .empty-state {
             text-align: center;
             padding: 32px;
             color: var(--text-2);
             background: var(--surface-2);
             border-radius: 16px;
+            width: 100%;
         }
 
+        /* ===== FOOTER ===== */
         footer {
             text-align: center;
             padding: 24px;
@@ -492,6 +555,28 @@
             font-size: 0.7rem;
             border-top: 1px solid var(--border);
             margin-top: 32px;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 600px) {
+            .color-preview {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .palette-item {
+                width: 60px;
+                height: 60px;
+            }
+            .harmony-swatch {
+                width: 50px;
+                height: 50px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .contrast-row {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
@@ -516,7 +601,7 @@
         <div>
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><span></span> SELECTOR CROMÁTICO</div>
+                    <div class="card-title"> SELECTOR CROMÁTICO</div>
                     <div class="wheel-legend">
                         <div class="legend-item"><div class="legend-dot" style="background:#ff4444;"></div><span>PURO</span></div>
                         <div class="legend-item"><div class="legend-dot" style="background:#ff8844;"></div><span>VIVO</span></div>
@@ -538,7 +623,7 @@
                     <input type="range" id="satSlider" min="0" max="100" value="100">
                 </div>
                 <div class="slider-group">
-                    <div class="slider-label"><span> BRILLO</span><span id="valVal">100%</span></div>
+                    <div class="slider-label"><span>✨ BRILLO</span><span id="valVal">100%</span></div>
                     <input type="range" id="valSlider" min="0" max="100" value="100">
                 </div>
 
@@ -547,9 +632,9 @@
                     <div class="color-info">
                         <div class="color-name" id="colorName">ROJO CADMIO</div>
                         <div class="color-codes">
-                            <span class="code-badge" id="rgbCode">rgb(255,0,0)<button class="copy-badge" data-copy="rgb"></button></span>
-                            <span class="code-badge" id="hexCode">#FF0000<button class="copy-badge" data-copy="hex"></button></span>
-                            <span class="code-badge" id="hsvCode">hsv(0°,100%,100%)<button class="copy-badge" data-copy="hsv"></button></span>
+                            <span class="code-badge" id="rgbCode">rgb(255,0,0)<button class="copy-badge" data-copy="rgb">📋</button></span>
+                            <span class="code-badge" id="hexCode">#FF0000<button class="copy-badge" data-copy="hex">📋</button></span>
+                            <span class="code-badge" id="hsvCode">hsv(0°,100%,100%)<button class="copy-badge" data-copy="hsv">📋</button></span>
                         </div>
                     </div>
                 </div>
@@ -557,20 +642,20 @@
 
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><span></span> MI PALETA</div>
+                    <div class="card-title">📚 MI PALETA</div>
                     <div class="btn-group" style="margin:0">
                         <button class="btn btn-primary" id="saveColorBtn">+ GUARDAR COLOR</button>
                         <button class="btn btn-secondary" id="clearPaletteBtn">LIMPIAR</button>
                     </div>
                 </div>
                 <div id="paletteGrid" class="palette-grid">
-                    <div class="empty-state"> GUARDA TUS COLORES FAVORITOS</div>
+                    <div class="empty-state">✨ GUARDA TUS COLORES FAVORITOS</div>
                 </div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><span></span> ESTADÍSTICAS</div>
+                    <div class="card-title"> ESTADÍSTICAS</div>
                 </div>
                 <div class="stats-grid">
                     <div class="stat-card"><div class="stat-value" id="statsColors">0</div><div class="stat-label">COLORES GUARDADOS</div></div>
@@ -584,7 +669,7 @@
         <div>
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><span></span> PALETAS ARMÓNICAS</div>
+                    <div class="card-title"> PALETAS ARMÓNICAS</div>
                 </div>
                 <div class="harmony-buttons">
                     <button class="harmony-btn active" data-harmony="complementary">COMPLEMENTARIO</button>
@@ -597,14 +682,14 @@
 
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><span></span> SUGERENCIAS</div>
+                    <div class="card-title"> SUGERENCIAS</div>
                 </div>
                 <div class="harmony-grid" id="suggestionsGrid"></div>
             </div>
 
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><span></span> GRADIENTE CSS</div>
+                    <div class="card-title"> GRADIENTE CSS</div>
                     <button class="icon-btn" id="copyGradientBtn" style="padding:6px 12px;">COPIAR</button>
                 </div>
                 <div class="gradient-preview" id="gradientPreview"></div>
@@ -613,7 +698,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><span>🔍</span> CONTRASTE WCAG</div>
+                    <div class="card-title"> CONTRASTE WCAG</div>
                 </div>
                 <div class="contrast-row">
                     <div class="contrast-card" id="contrastWhiteCard" style="background:white; color:black;">
@@ -630,7 +715,7 @@
 
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><span></span> CSS VARIABLES</div>
+                    <div class="card-title"> CSS VARIABLES</div>
                     <button class="icon-btn" id="copyCssBtn" style="padding:6px 12px;">COPIAR</button>
                 </div>
                 <div class="gradient-code" id="cssVariables" style="font-size:0.65rem;">:root { /* GUARDA COLORES PARA GENERAR VARIABLES */ }</div>
@@ -645,6 +730,8 @@
 
 <script>
     (function() {
+        'use strict';
+
         // ==================== DOM ====================
         const wheelCanvas = document.getElementById('wheelCanvas');
         const ctx = wheelCanvas.getContext('2d');
@@ -656,1104 +743,174 @@
         const hexSpan = document.getElementById('hexCode');
         const hsvSpan = document.getElementById('hsvCode');
         const colorNameSpan = document.getElementById('colorName');
-        
+
         // ==================== ESTADO ====================
         let currentColor = { r: 255, g: 0, b: 0 };
         let currentHue = 0, currentSat = 100, currentVal = 100;
         let customColors = [];
-        
-        // Cargar datos
+        let colorNames = {};
+
+        // Cargar paleta guardada
         const saved = localStorage.getItem('chromatica_palette');
         if (saved) customColors = JSON.parse(saved);
-        
-        // Nombres profesionales
-        const colorNames = {
-        // ==================== ROJOS (60 colores) ====================
-        '255,0,0': 'ROJO CADMIO',
-        '227,66,52': 'ROJO BERMELLÓN',
-        '220,20,60': 'CARMESÍ',
-        '178,34,34': 'ROJO FIRESTONE',
-        '165,42,42': 'ROJO MARRÓN',
-        '139,0,0': 'ROJO OSCURO',
-        '205,92,92': 'ROJO INDIAN',
-        '188,143,143': 'ROJO ROSA',
-        '199,21,133': 'ROJO VIOLETA',
-        '219,112,147': 'ROJO PALO',
-        '194,59,34': 'ROJO TERRACOTA',
-        '176,48,96': 'ROJO CARMÍN',
-        '214,40,40': 'ROJO ALIZARÍN',
-        '224,17,95': 'ROJO ROSE',
-        '222,49,99': 'ROJO CEREZA',
-        '200,56,56': 'ROJO VALENCIA',
-        '187,51,51': 'ROJO BOSTON',
-        '231,84,84': 'ROJO CORAL',
-        '244,66,66': 'ROJO TOMATE',
-        '255,99,71': 'ROJO SALMÓN',
-        '255,36,0': 'ROJO ESCARLATA',
-        '238,44,44': 'ROJO EMPERADOR',
-        '204,0,0': 'ROJO SANGRE',
-        '153,0,0': 'ROJO VINO',
-        '128,0,0': 'ROJO BURDEOS',
-        '102,0,0': 'ROJO MARRÓN OSCURO',
-        '76,0,0': 'ROJO CUERO',
-        '51,0,0': 'ROJO ÉBANO',
-        '204,51,51': 'ROJO LADRILLO',
-        '179,40,40': 'ROJO GRANATE',
-        '153,51,51': 'ROJO ÓXIDO',
-        '128,51,51': 'ROJO TIERRA',
-        '102,51,51': 'ROJO CAOBA',
-        '77,38,38': 'ROJO CEREZA OSCURO',
-        '204,102,102': 'ROJO ROSADO CLARO',
-        '179,77,77': 'ROJO SALMÓN OSCURO',
-        '153,77,77': 'ROJO CORAL OSCURO',
-        '128,77,77': 'ROJO TERRACOTA OSCURO',
-        '204,128,128': 'ROJO PASTEL',
-        '179,128,128': 'ROJO ARCILLA',
-        '255,51,51': 'ROJO NEÓN',
-        '255,102,102': 'ROJO BRILLANTE',
-        '255,153,153': 'ROJO CLARO SUAVE',
-        '255,204,204': 'ROJO BEBÉ',
-        '255,230,230': 'ROJO PERLA',
-        '240,128,128': 'ROJO INDIO',
-        '230,115,115': 'ROJO INDIANO',
-        '220,102,102': 'ROJO TERRANOVA',
-        '210,89,89': 'ROJO BURDEOS CLARO',
-        '200,76,76': 'ROJO BURDEOS SUAVE',
-        '190,63,63': 'ROJO VINO CLARO',
-        '180,50,50': 'ROJO VINO SUAVE',
-        '170,37,37': 'ROJO SANGRE CLARO',
-        '160,24,24': 'ROJO SANGRE SUAVE',
-        '150,11,11': 'ROJO SANGRE OSCURO',
-        '140,0,0': 'ROJO OSCURO SUAVE',
-        '130,0,0': 'ROJO OSCURO INTENSO',
-        '120,0,0': 'ROJO PROFUNDO',
-        '110,0,0': 'ROJO PROFUNDO SUAVE',
-        '100,0,0': 'ROJO PROFUNDO OSCURO',
 
-        // ==================== NARANJAS (60 colores) ====================
-        '255,165,0': 'NARANJA',
-        '255,140,0': 'NARANJA OSCURO',
-        '255,69,0': 'NARANJA ROJIZO',
-        '255,99,71': 'TOMATE',
-        '255,127,80': 'CORAL',
-        '255,160,122': 'SALMÓN CLARO',
-        '233,150,70': 'NARANJA PERSA',
-        '230,115,40': 'NARANJA CARROTA',
-        '204,85,0': 'NARANJA QUEMADO',
-        '255,102,0': 'NARANJA FLUOR',
-        '252,108,24': 'NARANJA PRINCETON',
-        '255,111,15': 'NARANJA ZANAHORIA',
-        '253,124,37': 'NARANJA MANDARINA',
-        '250,109,23': 'NARANJA CALABAZA',
-        '248,131,0': 'NARANJA ANARANJADO',
-        '241,127,8': 'NARANJA CLEMENTINA',
-        '245,128,38': 'NARANJA MARFIL',
-        '255,121,0': 'NARANJA AMARILLENTO',
-        '255,79,0': 'NARANJA FUERTE',
-        '255,51,0': 'NARANJA ROJO',
-        '230,81,0': 'NARANJA OCRE',
-        '205,61,0': 'NARANJA PERSIMMON',
-        '255,130,30': 'NARANJA MARACUYÁ',
-        '255,145,45': 'NARANJA DURAZNO',
-        '255,155,55': 'NARANJA ALBARICOQUE',
-        '255,170,70': 'NARANJA MELOCOTÓN',
-        '255,185,85': 'NARANJA MAMBA',
-        '255,200,100': 'NARANJA CLARO',
-        '255,215,115': 'NARANJA PASTEL',
-        '255,230,130': 'NARANJA CREMA',
-        '204,102,0': 'NARANJA MOSTAZA',
-        '179,89,0': 'NARANJA CENIZA',
-        '153,76,0': 'NARANJA TIERRA',
-        '128,64,0': 'NARANJA CAOBA',
-        '102,51,0': 'NARANJA MADERA',
-        '76,38,0': 'NARANJA CUERO',
-        '255,180,100': 'NARANJA DURAZNO SUAVE',
-        '255,190,120': 'NARANJA MELÓN',
-        '255,210,150': 'NARANJA BEBÉ',
-        '255,220,170': 'NARANJA NÁCAR',
-        '255,235,200': 'NARANJA PERLA',
-        '255,245,220': 'NARANJA MARFIL CLARO',
-        '255,200,150': 'NARANJA ARCILLA',
-        '255,185,135': 'NARANJA TERRACOTA CLARO',
-        '255,170,120': 'NARANJA TERRACOTA SUAVE',
-        '255,155,105': 'NARANJA TERRACOTA INTENSO',
-        '255,140,90': 'NARANJA CORAL CLARO',
-        '255,125,75': 'NARANJA CORAL SUAVE',
-        '255,110,60': 'NARANJA CORAL INTENSO',
-        '255,95,45': 'NARANJA SALMÓN SUAVE',
-        '255,80,30': 'NARANJA SALMÓN INTENSO',
-        '255,65,15': 'NARANJA FUERTE CLARO',
-        '255,50,0': 'NARANJA FUERTE INTENSO',
-        '245,100,0': 'NARANJA QUEMADO CLARO',
-        '235,90,0': 'NARANJA QUEMADO SUAVE',
-        '225,80,0': 'NARANJA QUEMADO INTENSO',
-        '215,70,0': 'NARANJA PERSIMMON SUAVE',
-        '205,60,0': 'NARANJA PERSIMMON INTENSO',
-        '195,50,0': 'NARANJA PERSIMMON OSCURO',
-        '185,40,0': 'NARANJA PERSIMMON PROFUNDO',
+        // ==================== CARGAR BASE DE DATOS ====================
+        async function loadColorDatabase() {
+            try {
+                const response = await fetch('colores.json?t=' + Date.now());
+                if (!response.ok) {
+                    throw new Error('No se pudo cargar la base de datos');
+                }
+                const data = await response.json();
 
-        // ==================== AMARILLOS (60 colores) ====================
-        '255,255,0': 'AMARILLO CADMIO',
-        '255,215,0': 'ORO',
-        '255,204,0': 'AMARILLO SELECTIVO',
-        '255,185,0': 'AMARILLO NÁPOLES',
-        '255,193,37': 'AMARILLO MOSTAZA',
-        '250,218,94': 'AMARILLO MAÍZ',
-        '253,253,150': 'AMARILLO PAJA',
-        '255,239,0': 'AMARILLO LIMÓN',
-        '255,255,153': 'AMARILLO CLARO',
-        '238,232,170': 'AMARILLO CAQUI',
-        '204,204,0': 'AMARILLO VERDOSO',
-        '210,180,140': 'AMARILLO TAN',
-        '218,165,32': 'AMARILLO METALIZADO',
-        '207,181,59': 'AMARILLO MOSTAZA OSCURO',
-        '191,169,48': 'AMARILLO OCRE',
-        '204,185,46': 'AMARILLO ÁMBAR',
-        '255,223,0': 'AMARILLO GIRASOL',
-        '255,220,50': 'AMARILLO POLLITO',
-        '253,208,23': 'AMARILLO SAFARI',
-        '254,213,35': 'AMARILLO PLÁTANO',
-        '255,245,0': 'AMARILLO FLUORESCENTE',
-        '255,235,0': 'AMARILLO BANANA',
-        '255,225,0': 'AMARILLO MIEL',
-        '255,215,0': 'AMARILLO ORO ANTIGUO',
-        '238,201,0': 'AMARILLO CURRY',
-        '221,187,0': 'AMARILLO MOSTAZA SUAVE',
-        '204,173,0': 'AMARILLO MOSTAZA CLARO',
-        '187,159,0': 'AMARILLO POLEN',
-        '170,145,0': 'AMARILLO OLIVA',
-        '153,131,0': 'AMARILLO TIERRA',
-        '136,117,0': 'AMARILLO OCRE OSCURO',
-        '119,102,0': 'AMARILLO CAFÉ',
-        '102,88,0': 'AMARILLO VERDE OSCURO',
-        '255,250,200': 'AMARILLO CREMA',
-        '255,245,190': 'AMARILLO VAINILLA',
-        '255,240,180': 'AMARILLO MANTEQUILLA',
-        '255,235,170': 'AMARILLO MAIZAL',
-        '255,230,160': 'AMARILLO ARENA',
-        '255,225,150': 'AMARILLO MARFIL',
-        '255,220,140': 'AMARILLO PERLA',
-        '255,215,130': 'AMARILLO NÁCAR',
-        '255,210,120': 'AMARILLO JAZMÍN',
-        '255,205,110': 'AMARILLO AZAFRÁN',
-        '255,200,100': 'AMARILLO CÚRCUMA',
-        '255,195,90': 'AMARILLO MOSTAZA SUAVE CLARO',
-        '255,190,80': 'AMARILLO MOSTAZA SUAVE INTENSO',
-        '255,185,70': 'AMARILLO OCRE CLARO',
-        '255,180,60': 'AMARILLO OCRE SUAVE',
-        '255,175,50': 'AMARILLO OCRE INTENSO',
-        '255,170,40': 'AMARILLO NÁPOLES SUAVE',
-        '255,165,30': 'AMARILLO NÁPOLES INTENSO',
-        '255,160,20': 'AMARILLO NÁPOLES CLARO',
-        '255,155,10': 'AMARILLO ÁMBAR SUAVE',
-        '255,150,0': 'AMARILLO ÁMBAR INTENSO',
-        '245,140,0': 'AMARILLO ORO SUAVE',
-        '235,130,0': 'AMARILLO ORO INTENSO',
-        '225,120,0': 'AMARILLO ORO CLARO',
-        '215,110,0': 'AMARILLO ORO OSCURO',
-        '205,100,0': 'AMARILLO ORO QUEMADO',
-        '195,90,0': 'AMARILLO ORO PROFUNDO',
+                // Aplanar el objeto anidado
+                colorNames = {};
+                if (data.colors) {
+                    for (const category in data.colors) {
+                        for (const key in data.colors[category]) {
+                            colorNames[key] = data.colors[category][key];
+                        }
+                    }
+                }
 
-        // ==================== VERDES (80 colores) ====================
-        '0,255,0': 'VERDE ESMERALDA',
-        '80,200,120': 'VERDE MALAQUITA',
-        '0,128,0': 'VERDE OSCURO',
-        '50,205,50': 'VERDE LIMÓN',
-        '60,179,113': 'VERDE MAR MEDIO',
-        '46,139,87': 'VERDE MAR',
-        '144,238,144': 'VERDE CLARO',
-        '152,251,152': 'VERDE PASTEL',
-        '124,252,0': 'VERDE MANZANA',
-        '127,255,0': 'VERDE AMARILLENTO',
-        '154,205,50': 'VERDE OLIVA',
-        '85,107,47': 'VERDE OLIVA OSCURO',
-        '107,142,35': 'VERDE OLIVA CLARO',
-        '34,139,34': 'VERDE BOSQUE',
-        '0,100,0': 'VERDE INTENSO',
-        '0,128,128': 'TURQUESA',
-        '0,139,139': 'TURQUESA OSCURO',
-        '72,209,204': 'TURQUESA MEDIO',
-        '64,224,208': 'TURQUESA CLARO',
-        '32,178,170': 'VERDE AÇAÍ',
-        '0,255,127': 'VERDE MENTA',
-        '0,250,154': 'VERDE MEDIO PRIMAVERA',
-        '143,188,143': 'VERDE OSCURO CLARO',
-        '102,205,170': 'VERDE AGUA MARINA',
-        '127,255,212': 'VERDE AGUAMARINA',
-        '176,224,230': 'VERDE GLACIAR',
-        '175,238,238': 'VERDE PÁLIDO',
-        '152,251,152': 'VERDE MENTA CLARO',
-        '143,188,143': 'VERDE SABIO',
-        '85,107,47': 'VERDE MILITAR',
-        '107,142,35': 'VERDE OLIVA BRILLANTE',
-        '124,252,0': 'VERDE LIMÓN INTENSO',
-        '127,255,0': 'VERDE MANZANA VERDE',
-        '50,205,50': 'VERDE LIMA',
-        '0,255,0': 'VERDE NEÓN',
-        '0,200,0': 'VERDE ELÉCTRICO',
-        '0,150,0': 'VERDE PROFUNDO',
-        '0,100,0': 'VERDE OSCURO INTENSO',
-        '0,50,0': 'VERDE NOCHE',
-        '204,255,204': 'VERDE BLANCO',
-        '153,255,153': 'VERDE CLARO SUAVE',
-        '102,255,102': 'VERDE BRILLANTE',
-        '51,255,51': 'VERDE FUERTE',
-        '0,255,102': 'VERDE MENTA SUAVE',
-        '0,255,153': 'VERDE JADE CLARO',
-        '0,255,204': 'VERDE TURQUESA SUAVE',
-        '51,255,153': 'VERDE AGUA',
-        '102,255,204': 'VERDE MAR CLARO',
-        '153,255,204': 'VERDE MAR SUAVE',
-        '204,255,153': 'VERDE LIMÓN SUAVE',
-        '153,204,51': 'VERDE LIMA OSCURO',
-        '102,153,0': 'VERDE OLIVA AMARILLO',
-        '51,102,0': 'VERDE OLIVA INTENSO',
-        '0,51,0': 'VERDE BOSQUE OSCURO',
-        '0,102,51': 'VERDE JADE OSCURO',
-        '0,153,102': 'VERDE MENTA OSCURO',
-        '0,204,153': 'VERDE TURQUESA INTENSO',
-        '0,255,204': 'VERDE PRIMAVERA',
-        '102,255,102': 'VERDE PASTEL INTENSO',
-        '204,255,204': 'VERDE HOJA',
-        '100,200,100': 'VERDE JARDÍN',
-        '90,180,90': 'VERDE CÉSPED',
-        '80,160,80': 'VERDE PRADERA',
-        '70,140,70': 'VERDE CAMPO',
-        '60,120,60': 'VERDE PASTO',
-        '50,100,50': 'VERDE BOSQUE CLARO',
-        '40,80,40': 'VERDE BOSQUE SUAVE',
-        '30,60,30': 'VERDE BOSQUE INTENSO',
-        '20,40,20': 'VERDE BOSQUE PROFUNDO',
-        '10,20,10': 'VERDE BOSQUE ABISAL',
-        '180,220,180': 'VERDE PISTACHO',
-        '170,210,170': 'VERDE PISTACHO CLARO',
-        '160,200,160': 'VERDE PISTACHO SUAVE',
-        '150,190,150': 'VERDE PISTACHO INTENSO',
-        '140,180,140': 'VERDE PISTACHO OSCURO',
-        '130,170,130': 'VERDE PISTACHO PROFUNDO',
-        '120,160,120': 'VERDE MATE',
-        '110,150,110': 'VERDE MATE SUAVE',
-        '100,140,100': 'VERDE MATE OSCURO',
-        '90,130,90': 'VERDE MATE INTENSO',
-
-        // ==================== AZULES (80 colores) ====================
-        '0,0,255': 'AZUL COBALTO',
-        '0,127,255': 'AZUL CELESTE',
-        '65,105,225': 'AZUL REAL',
-        '70,130,180': 'AZUL ACERO',
-        '100,149,237': 'AZUL CORNFLOWER',
-        '135,206,235': 'AZUL CIELO',
-        '0,191,255': 'AZUL PROFUNDO',
-        '30,144,255': 'AZUL DODGER',
-        '0,0,205': 'AZUL MEDIO',
-        '25,25,112': 'AZUL MEDIANOCHE',
-        '0,0,139': 'AZUL OSCURO',
-        '106,90,205': 'AZUL PIZARRA',
-        '123,104,238': 'AZUL PÚRPURA',
-        '72,61,139': 'AZUL VIOLETA',
-        '138,43,226': 'AZUL ELÉCTRICO',
-        '75,0,130': 'AÑIL',
-        '0,0,128': 'AZUL MARINO',
-        '95,158,160': 'AZUL CADET',
-        '176,224,230': 'AZUL GLACIAR',
-        '173,216,230': 'AZUL BEBÉ',
-        '0,0,255': 'AZUL ELÉCTRICO',
-        '0,0,200': 'AZUL INTENSO',
-        '0,0,150': 'AZUL MEDIO OSCURO',
-        '0,0,100': 'AZUL OSCURO INTENSO',
-        '0,0,50': 'AZUL NOCHE',
-        '0,51,102': 'AZUL MARINO OSCURO',
-        '0,102,204': 'AZUL CERÚLEO',
-        '0,153,255': 'AZUL CIELO BRILLANTE',
-        '51,153,255': 'AZUL CLARO FUERTE',
-        '102,204,255': 'AZUL CLARO SUAVE',
-        '153,204,255': 'AZUL BEBÉ SUAVE',
-        '204,229,255': 'AZUL HIELO',
-        '230,242,255': 'AZUL BLANCO',
-        '0,191,255': 'AZUL PROFUNDO MARINO',
-        '0,128,255': 'AZUL REAL CLARO',
-        '0,64,255': 'AZUL REAL OSCURO',
-        '64,64,255': 'AZUL MEDIO FUERTE',
-        '128,128,255': 'AZUL CLARO FUERTE',
-        '191,191,255': 'AZUL CLARO SUAVE',
-        '224,224,255': 'AZUL PERLA',
-        '0,0,255': 'AZUL NEÓN',
-        '0,0,230': 'AZUL SATURADO',
-        '0,0,205': 'AZUL MEDIO',
-        '0,0,180': 'AZUL MEDIO OSCURO',
-        '0,0,155': 'AZUL OSCURO CLARO',
-        '0,0,130': 'AZUL OSCURO SUAVE',
-        '0,0,105': 'AZUL OSCURO INTENSO',
-        '0,0,80': 'AZUL NOCHE CLARO',
-        '0,0,55': 'AZUL NOCHE SUAVE',
-        '0,0,30': 'AZUL ABISAL',
-        '0,25,51': 'AZUL MEDIANOCHE CLARO',
-        '0,51,102': 'AZUL MEDIANOCHE SUAVE',
-        '0,76,153': 'AZUL MEDIANOCHE INTENSO',
-        '0,102,204': 'AZUL REY',
-        '0,127,255': 'AZUL REY CLARO',
-        '0,153,255': 'AZUL REY SUAVE',
-        '0,178,255': 'AZUL CELESTE INTENSO',
-        '0,204,255': 'AZUL CELESTE SUAVE',
-        '0,229,255': 'AZUL CIELO INTENSO',
-        '50,150,250': 'AZUL MAR CLARO',
-        '40,140,240': 'AZUL MAR SUAVE',
-        '30,130,230': 'AZUL MAR INTENSO',
-        '20,120,220': 'AZUL MAR OSCURO',
-        '10,110,210': 'AZUL MAR PROFUNDO',
-        '0,100,200': 'AZUL MAR ABISAL',
-        '100,150,200': 'AZUL GRIS CLARO',
-        '90,140,190': 'AZUL GRIS SUAVE',
-        '80,130,180': 'AZUL GRIS INTENSO',
-        '70,120,170': 'AZUL GRIS OSCURO',
-        '60,110,160': 'AZUL GRIS PROFUNDO',
-        '50,100,150': 'AZUL ACERO CLARO',
-        '40,90,140': 'AZUL ACERO SUAVE',
-        '30,80,130': 'AZUL ACERO INTENSO',
-        '20,70,120': 'AZUL ACERO OSCURO',
-        '10,60,110': 'AZUL ACERO PROFUNDO',
-        '0,50,100': 'AZUL ACERO ABISAL',
-        '150,180,220': 'AZUL PERLA CLARO',
-        '140,170,210': 'AZUL PERLA SUAVE',
-        '130,160,200': 'AZUL PERLA INTENSO',
-        '120,150,190': 'AZUL PERLA OSCURO',
-        '110,140,180': 'AZUL PERLA PROFUNDO',
-
-        // ==================== PÚRPURAS / VIOLETAS (60 colores) ====================
-        '128,0,128': 'PÚRPURA',
-        '255,0,255': 'MAGENTA',
-        '192,192,192': 'PÚRPURA GRIS',
-        '147,112,219': 'PÚRPURA MEDIO',
-        '153,50,204': 'PÚRPURA OSCURO',
-        '186,85,211': 'PÚRPURA ORQUÍDEA',
-        '218,112,214': 'PÚRPURA ORQUÍDEA CLARO',
-        '221,160,221': 'PÚRPURA MALVA',
-        '216,191,216': 'PÚRPURA THISTLE',
-        '238,130,238': 'VIOLETA',
-        '255,99,71': 'VIOLETA TOMATE',
-        '148,0,211': 'VIOLETA OSCURO',
-        '139,0,139': 'VIOLETA MAGENTA',
-        '199,21,133': 'VIOLETA MEDIO',
-        '219,112,147': 'VIOLETA PALE',
-        '255,105,180': 'ROSA FUCSIA',
-        '255,20,147': 'ROSA PROFUNDO',
-        '255,182,193': 'ROSA CLARO',
-        '255,192,203': 'ROSA',
-        '255,228,225': 'ROSA BLANCO',
-        '128,0,128': 'PÚRPURA REAL',
-        '102,0,102': 'PÚRPURA OSCURO INTENSO',
-        '76,0,76': 'PÚRPURA NOCHE',
-        '51,0,51': 'PÚRPURA ABISAL',
-        '153,51,153': 'PÚRPURA MEDIO CLARO',
-        '179,102,179': 'PÚRPURA CLARO',
-        '204,153,204': 'PÚRPURA SUAVE',
-        '230,204,230': 'PÚRPURA PASTEL',
-        '245,230,245': 'PÚRPURA BLANCO',
-        '255,0,255': 'MAGENTA NEÓN',
-        '204,0,204': 'MAGENTA OSCURO',
-        '153,0,153': 'MAGENTA PROFUNDO',
-        '102,0,102': 'MAGENTA NOCHE',
-        '255,51,255': 'MAGENTA CLARO',
-        '255,102,255': 'MAGENTA SUAVE',
-        '255,153,255': 'MAGENTA PASTEL',
-        '255,204,255': 'MAGENTA BLANCO',
-        '204,102,204': 'PÚRPURA ORQUÍDEA MEDIO',
-        '179,77,179': 'PÚRPURA ORQUÍDEA OSCURO',
-        '230,153,230': 'PÚRPURA ORQUÍDEA SUAVE',
-        '200,100,200': 'PÚRPURA LILA',
-        '190,90,190': 'PÚRPURA LILA SUAVE',
-        '180,80,180': 'PÚRPURA LILA OSCURO',
-        '170,70,170': 'PÚRPURA LILA INTENSO',
-        '160,60,160': 'PÚRPURA LILA PROFUNDO',
-        '150,50,150': 'PÚRPURA VIOLETA SUAVE',
-        '140,40,140': 'PÚRPURA VIOLETA INTENSO',
-        '130,30,130': 'PÚRPURA VIOLETA OSCURO',
-        '120,20,120': 'PÚRPURA VIOLETA PROFUNDO',
-        '110,10,110': 'PÚRPURA VIOLETA ABISAL',
-        '220,150,220': 'PÚRPURA MALVA CLARO',
-        '210,140,210': 'PÚRPURA MALVA SUAVE',
-        '200,130,200': 'PÚRPURA MALVA INTENSO',
-        '190,120,190': 'PÚRPURA MALVA OSCURO',
-        '180,110,180': 'PÚRPURA MALVA PROFUNDO',
-        '170,100,170': 'PÚRPURA THISTLE CLARO',
-        '160,90,160': 'PÚRPURA THISTLE SUAVE',
-        '150,80,150': 'PÚRPURA THISTLE INTENSO',
-        '140,70,140': 'PÚRPURA THISTLE OSCURO',
-        '130,60,130': 'PÚRPURA THISTLE PROFUNDO',
-
-        // ==================== MARRONES / TIERRA (70 colores) ====================
-        '160,82,45': 'SIENA',
-        '210,105,30': 'MARRÓN CHOCOLATE',
-        '139,69,19': 'MARRÓN SADDLE',
-        '205,133,63': 'MARRÓN PERU',
-        '222,184,135': 'MARRÓN BURLEYWOOD',
-        '188,143,143': 'MARRÓN ROSA',
-        '101,67,33': 'MARRÓN CAFÉ',
-        '92,64,51': 'MARRÓN OCRE',
-        '150,75,0': 'MARRÓN TERRACOTA',
-        '126,63,0': 'MARRÓN CACAO',
-        '113,69,32': 'MARRÓN TOFFEE',
-        '170,107,53': 'MARRÓN CARAMELO',
-        '140,81,28': 'MARRÓN CASTAÑA',
-        '115,65,25': 'MARRÓN CACAO OSCURO',
-        '94,54,28': 'MARRÓN CACAO CLARO',
-        '80,50,30': 'MARRÓN CACAO MEDIO',
-        '120,72,35': 'MARRÓN HABANO',
-        '108,62,30': 'MARRÓN CIGARRA',
-        '97,55,27': 'MARRÓN TOSTADO',
-        '86,48,24': 'MARRÓN TOSTADO OSCURO',
-        '160,82,45': 'MARRÓN SIENA',
-        '139,69,19': 'MARRÓN CAOBA',
-        '128,64,0': 'MARRÓN COBRE',
-        '102,51,0': 'MARRÓN BRONCE',
-        '76,38,0': 'MARRÓN CUERO',
-        '51,25,0': 'MARRÓN ÉBANO',
-        '184,115,51': 'MARRÓN METÁLICO',
-        '166,104,46': 'MARRÓN DORADO',
-        '148,93,41': 'MARRÓN ORO',
-        '130,82,36': 'MARRÓN OCRE OSCURO',
-        '112,71,31': 'MARRÓN TIERRA',
-        '94,60,26': 'MARRÓN ARCILLA',
-        '76,49,21': 'MARRÓN BARRO',
-        '58,38,16': 'MARRÓN PANTANO',
-        '40,27,11': 'MARRÓN TURBA',
-        '222,184,135': 'MARRÓN ARENA',
-        '210,170,120': 'MARRÓN BEIGE',
-        '198,156,105': 'MARRÓN CREMA',
-        '186,142,90': 'MARRÓN TOSTADO SUAVE',
-        '174,128,75': 'MARRÓN CARAMELO SUAVE',
-        '162,114,60': 'MARRÓN CAFÉ SUAVE',
-        '150,100,45': 'MARRÓN CACAO SUAVE',
-        '138,86,30': 'MARRÓN CASTAÑA SUAVE',
-        '126,72,15': 'MARRÓN TERRACOTA SUAVE',
-        '114,58,0': 'MARRÓN SIENA SUAVE',
-        '102,44,0': 'MARRÓN CAOBA SUAVE',
-        '90,30,0': 'MARRÓN ROJO SUAVE',
-        '78,16,0': 'MARRÓN OSCURO SUAVE',
-        '66,2,0': 'MARRÓN PROFUNDO',
-        '200,150,100': 'MARRÓN CANELA',
-        '190,140,90': 'MARRÓN CANELA SUAVE',
-        '180,130,80': 'MARRÓN CANELA OSCURO',
-        '170,120,70': 'MARRÓN CANELA INTENSO',
-        '160,110,60': 'MARRÓN ESPECIA',
-        '150,100,50': 'MARRÓN ESPECIA SUAVE',
-        '140,90,40': 'MARRÓN ESPECIA OSCURO',
-        '130,80,30': 'MARRÓN ESPECIA INTENSO',
-        '120,70,20': 'MARRÓN CLAVO',
-        '110,60,10': 'MARRÓN CLAVO SUAVE',
-        '100,50,0': 'MARRÓN CLAVO OSCURO',
-        '90,40,0': 'MARRÓN CLAVO INTENSO',
-        '80,30,0': 'MARRÓN PIMIENTA',
-        '70,20,0': 'MARRÓN PIMIENTA SUAVE',
-        '60,10,0': 'MARRÓN PIMIENTA OSCURO',
-        '50,0,0': 'MARRÓN PIMIENTA INTENSO',
-        '180,140,100': 'MARRÓN TRUFA',
-        '170,130,90': 'MARRÓN TRUFA SUAVE',
-        '160,120,80': 'MARRÓN TRUFA OSCURO',
-        '150,110,70': 'MARRÓN TRUFA INTENSO',
-        '140,100,60': 'MARRÓN TRUFA PROFUNDO',
-
-        // ==================== GRISES (70 colores) ====================
-        '128,128,128': 'GRIS',
-        '192,192,192': 'GRIS PLATEADO',
-        '169,169,169': 'GRIS OSCURO',
-        '211,211,211': 'GRIS CLARO',
-        '119,136,153': 'GRIS PIZARRA',
-        '112,128,144': 'GRIS PIZARRA OSCURO',
-        '176,196,222': 'GRIS ACERO',
-        '105,105,105': 'GRIS DIM',
-        '245,245,245': 'GRIS WHITESMOKE',
-        '220,220,220': 'GRIS GAINSBORO',
-        '200,200,200': 'GRIS MEDIO',
-        '150,150,150': 'GRIS PLOMO',
-        '100,100,100': 'GRIS CARBÓN',
-        '80,80,80': 'GRIS HUMO',
-        '60,60,60': 'GRIS HORMIGÓN',
-        '50,50,50': 'GRIS MARTILLO',
-        '40,40,40': 'GRIS PIZARRA',
-        '30,30,30': 'GRIS METAL',
-        '20,20,20': 'GRIS HIERRO',
-        '10,10,10': 'GRIS NOCHE',
-        '240,240,240': 'GRIS BEBÉ',
-        '235,235,235': 'GRIS PERLA',
-        '230,230,230': 'GRIS NÁCAR',
-        '225,225,225': 'GRIS MARFIL',
-        '220,220,220': 'GRIS PLATA',
-        '215,215,215': 'GRIS ESTAÑO',
-        '210,210,210': 'GRIS ALUMINIO',
-        '205,205,205': 'GRIS CROMO',
-        '200,200,200': 'GRIS NÍQUEL',
-        '195,195,195': 'GRIS TITANIO',
-        '190,190,190': 'GRIS ACERO SUAVE',
-        '185,185,185': 'GRIS METAL CLARO',
-        '180,180,180': 'GRIS METAL OSCURO',
-        '175,175,175': 'GRIS PLOMO CLARO',
-        '170,170,170': 'GRIS PLOMO OSCURO',
-        '165,165,165': 'GRIS CARBÓN CLARO',
-        '160,160,160': 'GRIS CARBÓN OSCURO',
-        '155,155,155': 'GRIS HUMO CLARO',
-        '150,150,150': 'GRIS HUMO OSCURO',
-        '145,145,145': 'GRIS HORMIGÓN CLARO',
-        '140,140,140': 'GRIS HORMIGÓN OSCURO',
-        '135,135,135': 'GRIS MARTILLO CLARO',
-        '130,130,130': 'GRIS MARTILLO OSCURO',
-        '125,125,125': 'GRIS PIZARRA CLARO',
-        '120,120,120': 'GRIS PIZARRA MEDIO',
-        '115,115,115': 'GRIS METAL CLARO',
-        '110,110,110': 'GRIS METAL MEDIO',
-        '105,105,105': 'GRIS HIERRO CLARO',
-        '100,100,100': 'GRIS HIERRO MEDIO',
-        '95,95,95': 'GRIS CEMENTO',
-        '90,90,90': 'GRIS CEMENTO SUAVE',
-        '85,85,85': 'GRIS CEMENTO OSCURO',
-        '80,80,80': 'GRIS CEMENTO INTENSO',
-        '75,75,75': 'GRIS PIEDRA',
-        '70,70,70': 'GRIS PIEDRA SUAVE',
-        '65,65,65': 'GRIS PIEDRA OSCURO',
-        '60,60,60': 'GRIS PIEDRA INTENSO',
-        '55,55,55': 'GRIS ROCA',
-        '50,50,50': 'GRIS ROCA SUAVE',
-        '45,45,45': 'GRIS ROCA OSCURO',
-        '40,40,40': 'GRIS ROCA INTENSO',
-        '35,35,35': 'GRIS MINERAL',
-        '30,30,30': 'GRIS MINERAL SUAVE',
-        '25,25,25': 'GRIS MINERAL OSCURO',
-        '20,20,20': 'GRIS MINERAL INTENSO',
-        '15,15,15': 'GRIS PIZARRA PROFUNDO',
-        '12,12,12': 'GRIS CARBÓN PROFUNDO',
-        '8,8,8': 'GRIS HUMO PROFUNDO',
-        '5,5,5': 'GRIS NOCHE PROFUNDO',
-        '2,2,2': 'GRIS ABISAL',
-
-        // ==================== BLANCOS / BEIGES (70 colores) ====================
-        '255,255,255': 'BLANCO',
-        '255,250,240': 'BLANCO FLORAL',
-        '250,240,230': 'LIENZO',
-        '245,245,220': 'BEIGE',
-        '255,248,220': 'BEIGE CORSÉ',
-        '245,222,179': 'BEIGE WHEAT',
-        '255,255,224': 'BEIGE IVORY',
-        '250,235,215': 'BEIGE LINO',
-        '255,239,213': 'BEIGE PAPAYA',
-        '255,228,181': 'BEIGE MOCASSIN',
-        '255,222,173': 'BEIGE NAVAJO',
-        '253,245,230': 'BEIGE ALMENDRA',
-        '248,248,255': 'BEIGE GHOST',
-        '240,255,240': 'BEIGE HONEYDEW',
-        '255,255,240': 'BEIGE MARFIL',
-        '255,250,250': 'BEIGE NIEVE',
-        '245,245,245': 'BEIGE PERLA',
-        '240,248,255': 'BEIGE ALICE',
-        '230,230,250': 'BEIGE LAVANDA',
-        '255,240,245': 'BEIGE ROSA',
-        '255,235,235': 'BEIGE ROSADO',
-        '255,245,245': 'BEIGE BEBÉ',
-        '255,250,250': 'BEIGE NIEVE CLARO',
-        '255,252,252': 'BEIGE NIEVE SUAVE',
-        '255,254,254': 'BEIGE NIEVE INTENSO',
-        '250,250,250': 'BEIGE PERLA CLARO',
-        '248,248,248': 'BEIGE PERLA SUAVE',
-        '245,245,245': 'BEIGE PERLA INTENSO',
-        '242,242,242': 'BEIGE MARFIL CLARO',
-        '240,240,240': 'BEIGE MARFIL SUAVE',
-        '238,238,238': 'BEIGE MARFIL INTENSO',
-        '235,235,235': 'BEIGE LINO CLARO',
-        '233,233,233': 'BEIGE LINO SUAVE',
-        '230,230,230': 'BEIGE LINO INTENSO',
-        '228,228,228': 'BEIGE ALMENDRA CLARO',
-        '225,225,225': 'BEIGE ALMENDRA SUAVE',
-        '223,223,223': 'BEIGE ALMENDRA INTENSO',
-        '220,220,220': 'BEIGE WHEAT CLARO',
-        '218,218,218': 'BEIGE WHEAT SUAVE',
-        '215,215,215': 'BEIGE WHEAT INTENSO',
-        '213,213,213': 'BEIGE NAVAJO CLARO',
-        '210,210,210': 'BEIGE NAVAJO SUAVE',
-        '208,208,208': 'BEIGE NAVAJO INTENSO',
-        '205,205,205': 'BEIGE MOCASSIN CLARO',
-        '203,203,203': 'BEIGE MOCASSIN SUAVE',
-        '200,200,200': 'BEIGE MOCASSIN INTENSO',
-        '198,198,198': 'BEIGE PAPAYA CLARO',
-        '195,195,195': 'BEIGE PAPAYA SUAVE',
-        '193,193,193': 'BEIGE PAPAYA INTENSO',
-        '190,190,190': 'BEIGE CORSÉ CLARO',
-        '255,248,235': 'BEIGE VAINILLA',
-        '255,245,230': 'BEIGE VAINILLA SUAVE',
-        '255,242,225': 'BEIGE VAINILLA CLARO',
-        '255,240,220': 'BEIGE VAINILLA INTENSO',
-        '250,235,210': 'BEIGE ALMOGÁVAR',
-        '245,230,205': 'BEIGE ALMOGÁVAR SUAVE',
-        '240,225,200': 'BEIGE ALMOGÁVAR CLARO',
-        '235,220,195': 'BEIGE ALMOGÁVAR INTENSO',
-        '230,215,190': 'BEIGE ARENA CLARA',
-        '225,210,185': 'BEIGE ARENA SUAVE',
-        '220,205,180': 'BEIGE ARENA INTENSO',
-        '215,200,175': 'BEIGE ARENA OSCURA',
-        '210,195,170': 'BEIGE DUNAS',
-        '205,190,165': 'BEIGE DUNAS SUAVE',
-        '200,185,160': 'BEIGE DUNAS CLARO',
-        '195,180,155': 'BEIGE DUNAS INTENSO',
-        '190,175,150': 'BEIGE DESIERTO',
-        '185,170,145': 'BEIGE DESIERTO SUAVE',
-        '180,165,140': 'BEIGE DESIERTO CLARO',
-        '175,160,135': 'BEIGE DESIERTO INTENSO',
-
-        // ==================== NEGROS (50 colores) ====================
-        '0,0,0': 'NEGRO',
-        '24,24,24': 'NEGRO ÉBANO',
-        '33,33,33': 'NEGRO CARBÓN',
-        '42,42,42': 'NEGRO AZABACHE',
-        '51,51,51': 'NEGRO GRAFITO',
-        '64,64,64': 'NEGRO PIEDRA',
-        '75,75,75': 'NEGRO PIZARRA',
-        '85,85,85': 'NEGRO FUMO',
-        '95,95,95': 'NEGRO PLOMO',
-        '111,111,111': 'NEGRO METAL',
-        '28,28,28': 'NEGRO JET',
-        '18,18,18': 'NEGRO TINTA',
-        '8,8,8': 'NEGRO ABISAL',
-        '0,5,10': 'NEGRO MEDIANOCHE',
-        '5,5,10': 'NEGRO ESPACIO',
-        '10,10,15': 'NEGRO VELVET',
-        '15,15,20': 'NEGRO OBSIDIANA',
-        '20,20,25': 'NEGRO TIZA',
-        '25,25,30': 'NEGRO CENIZA',
-        '30,30,35': 'NEGRO HULLA',
-        '12,12,12': 'NEGRO CAVIAR',
-        '16,16,16': 'NEGRO ONIX',
-        '22,22,22': 'NEGRO MARTE',
-        '27,27,27': 'NEGRO LUNAR',
-        '31,31,31': 'NEGRO SOMBRA',
-        '36,36,36': 'NEGRO OSCURO CLARO',
-        '41,41,41': 'NEGRO OSCURO SUAVE',
-        '46,46,46': 'NEGRO OSCURO INTENSO',
-        '52,52,52': 'NEGRO MEDIO CLARO',
-        '57,57,57': 'NEGRO MEDIO SUAVE',
-        '62,62,62': 'NEGRO MEDIO INTENSO',
-        '68,68,68': 'NEGRO CLARO SUAVE',
-        '73,73,73': 'NEGRO CLARO INTENSO',
-        '78,78,78': 'NEGRO GRISÁCEO',
-        '83,83,83': 'NEGRO PLATEADO',
-        '88,88,88': 'NEGRO METÁLICO',
-        '93,93,93': 'NEGRO ACERO',
-        '98,98,98': 'NEGRO HIERRO',
-        '103,103,103': 'NEGRO CARBONO',
-        '108,108,108': 'NEGRO CENICIENTO',
-        '7,7,7': 'NEGRO PROFUNDO',
-        '6,6,6': 'NEGRO PROFUNDO SUAVE',
-        '5,5,5': 'NEGRO PROFUNDO INTENSO',
-        '4,4,4': 'NEGRO PROFUNDO OSCURO',
-        '3,3,3': 'NEGRO ABISAL SUAVE',
-        '2,2,2': 'NEGRO ABISAL INTENSO',
-        '1,1,1': 'NEGRO ABISAL OSCURO',
-        '0,0,0': 'NEGRO ABSOLUTO',
-        '10,10,10': 'NEGRO TIZA SUAVE',
-        '14,14,14': 'NEGRO TIZA INTENSO',
-
-        // ==================== ROSAS / CORALES (60 colores) ====================
-        '255,192,203': 'ROSA',
-        '255,105,180': 'ROSA FUERTE',
-        '255,20,147': 'ROSA PROFUNDO',
-        '219,112,147': 'ROSA PALE',
-        '199,21,133': 'ROSA MEDIO',
-        '147,112,219': 'ROSA MORADO',
-        '255,182,193': 'ROSA CLARO',
-        '255,228,225': 'ROSA BLANCO',
-        '255,179,191': 'ROSA BEBÉ',
-        '250,128,114': 'ROSA SALMÓN',
-        '255,160,122': 'ROSA LIGHT',
-        '255,127,80': 'ROSA CORAL',
-        '255,99,71': 'ROSA TOMATE',
-        '240,128,128': 'ROSA INDIO',
-        '205,92,92': 'ROSA INDIAN',
-        '188,143,143': 'ROSA ROSADO',
-        '218,160,160': 'ROSA ANTIGUO',
-        '221,160,221': 'ROSA MALVA',
-        '238,130,238': 'ROSA VIOLETA',
-        '255,0,127': 'ROSA NEÓN',
-        '255,204,204': 'ROSA PASTEL',
-        '255,216,216': 'ROSA PERLA',
-        '255,228,228': 'ROSA NÁCAR',
-        '255,240,240': 'ROSA MARFIL',
-        '255,245,245': 'ROSA BLANCO SUAVE',
-        '255,250,250': 'ROSA NIEVE',
-        '250,200,200': 'ROSA BEBÉ SUAVE',
-        '245,190,190': 'ROSA BEBÉ OSCURO',
-        '240,180,180': 'ROSA CLARO SUAVE',
-        '235,170,170': 'ROSA CLARO OSCURO',
-        '230,160,160': 'ROSA MEDIO SUAVE',
-        '225,150,150': 'ROSA MEDIO OSCURO',
-        '220,140,140': 'ROSA PROFUNDO SUAVE',
-        '215,130,130': 'ROSA PROFUNDO OSCURO',
-        '210,120,120': 'ROSA FUERTE SUAVE',
-        '205,110,110': 'ROSA FUERTE OSCURO',
-        '200,100,100': 'ROSA INTENSO',
-        '195,90,90': 'ROSA CARMÍN',
-        '190,80,80': 'ROSA RUBÍ',
-        '185,70,70': 'ROSA GRANATE',
-        '255,210,210': 'ROSA CORAL CLARO',
-        '255,200,200': 'ROSA CORAL SUAVE',
-        '255,190,190': 'ROSA CORAL INTENSO',
-        '255,180,180': 'ROSA CORAL OSCURO',
-        '255,170,170': 'ROSA SALMÓN CLARO',
-        '255,160,160': 'ROSA SALMÓN SUAVE',
-        '255,150,150': 'ROSA SALMÓN INTENSO',
-        '255,140,140': 'ROSA SALMÓN OSCURO',
-        '250,150,150': 'ROSA NÁCAR SUAVE',
-        '245,140,140': 'ROSA NÁCAR INTENSO',
-        '240,130,130': 'ROSA NÁCAR OSCURO',
-        '235,120,120': 'ROSA PERLA SUAVE',
-        '230,110,110': 'ROSA PERLA INTENSO',
-        '225,100,100': 'ROSA PERLA OSCURO',
-        '220,90,90': 'ROSA MARFIL SUAVE',
-        '215,80,80': 'ROSA MARFIL INTENSO',
-        '210,70,70': 'ROSA MARFIL OSCURO',
-        '205,60,60': 'ROSA ROSADO SUAVE',
-        '200,50,50': 'ROSA ROSADO INTENSO',
-        '195,40,40': 'ROSA ROSADO OSCURO',
-
-        // ==================== CIAN / TURQUESAS (60 colores) ====================
-        '0,255,255': 'CIAN',
-        '0,255,255': 'CIAN CLARO',
-        '0,139,139': 'CIAN OSCURO',
-        '0,206,209': 'CIAN MEDIO',
-        '72,209,204': 'CIAN TURQUESA',
-        '64,224,208': 'CIAN TURQUESA CLARO',
-        '32,178,170': 'CIAN AÇAÍ',
-        '0,128,128': 'CIAN TEAL',
-        '48,213,200': 'CIAN MENTA',
-        '56,221,209': 'CIAN AGUA',
-        '68,227,215': 'CIAN MAR',
-        '76,233,221': 'CIAN LAGO',
-        '84,239,227': 'CIAN GLACIAR',
-        '92,245,233': 'CIAN POLAR',
-        '100,251,239': 'CIAN HIELO',
-        '120,240,220': 'CIAN JADE',
-        '130,230,210': 'CIAN PETRÓLEO',
-        '140,220,200': 'CIAN MARFIL',
-        '150,210,190': 'CIAN PLATA',
-        '160,200,180': 'CIAN PERLA',
-        '0,230,230': 'CIAN NEÓN',
-        '0,205,205': 'CIAN ELÉCTRICO',
-        '0,180,180': 'CIAN PROFUNDO',
-        '0,155,155': 'CIAN OSCURO INTENSO',
-        '0,130,130': 'CIAN OSCURO SUAVE',
-        '0,105,105': 'CIAN MEDIO OSCURO',
-        '0,80,80': 'CIAN MEDIO INTENSO',
-        '0,55,55': 'CIAN CLARO OSCURO',
-        '0,30,30': 'CIAN CLARO INTENSO',
-        '64,224,208': 'TURQUESA BRILLANTE',
-        '72,209,204': 'TURQUESA MEDIA',
-        '80,194,200': 'TURQUESA SUAVE',
-        '88,179,196': 'TURQUESA OSCURA',
-        '96,164,192': 'TURQUESA GRIS',
-        '104,149,188': 'TURQUESA METAL',
-        '112,134,184': 'TURQUESA ACERO',
-        '120,119,180': 'TURQUESA PÚRPURA',
-        '128,104,176': 'TURQUESA VIOLETA',
-        '136,89,172': 'TURQUESA LILA',
-        '144,74,168': 'TURQUESA MORADA',
-        '200,240,240': 'CIAN BEBÉ',
-        '190,235,235': 'CIAN BEBÉ SUAVE',
-        '180,230,230': 'CIAN BEBÉ CLARO',
-        '170,225,225': 'CIAN BEBÉ INTENSO',
-        '160,220,220': 'CIAN PERLA SUAVE',
-        '150,215,215': 'CIAN PERLA CLARO',
-        '140,210,210': 'CIAN PERLA INTENSO',
-        '130,205,205': 'CIAN MARFIL SUAVE',
-        '120,200,200': 'CIAN MARFIL CLARO',
-        '110,195,195': 'CIAN MARFIL INTENSO',
-        '100,190,190': 'CIAN PLATA SUAVE',
-        '90,185,185': 'CIAN PLATA CLARO',
-        '80,180,180': 'CIAN PLATA INTENSO',
-        '70,175,175': 'CIAN JADE SUAVE',
-        '60,170,170': 'CIAN JADE CLARO',
-        '50,165,165': 'CIAN JADE INTENSO',
-        '40,160,160': 'CIAN PETRÓLEO SUAVE',
-        '30,155,155': 'CIAN PETRÓLEO CLARO',
-        '20,150,150': 'CIAN PETRÓLEO INTENSO',
-        '10,145,145': 'CIAN PETRÓLEO OSCURO',
-
-        // ==================== LAVANDAS / LILAS (60 colores) ====================
-        '230,230,250': 'LAVANDA',
-        '216,191,216': 'LILA',
-        '221,160,221': 'LILA CLARO',
-        '186,85,211': 'LILA MEDIO',
-        '147,112,219': 'LILA OSCURO',
-        '153,50,204': 'LILA PURPURA',
-        '218,112,214': 'LILA ORQUÍDEA',
-        '238,130,238': 'LILA VIOLETA',
-        '255,240,245': 'LILA ROSA',
-        '248,222,248': 'LILA BEBÉ',
-        '240,210,240': 'LILA POLVO',
-        '235,200,235': 'LILA MAJADERO',
-        '230,190,230': 'LILA CARDENAL',
-        '225,180,225': 'LILA AMATISTA',
-        '220,170,220': 'LILA MORADO',
-        '215,160,215': 'LILA LAVANDA',
-        '210,150,210': 'LILA MALVA',
-        '205,140,205': 'LILA VIOLETA CLARO',
-        '200,130,200': 'LILA PÚRPURA CLARO',
-        '195,120,195': 'LILA MAGENTA',
-        '245,235,245': 'LAVANDA BLANCO',
-        '240,230,240': 'LAVANDA CLARO',
-        '235,225,235': 'LAVANDA SUAVE',
-        '230,220,230': 'LAVANDA MEDIO',
-        '225,215,225': 'LAVANDA OSCURO',
-        '220,210,220': 'LAVANDA INTENSO',
-        '215,205,215': 'LAVANDA GRIS',
-        '210,200,210': 'LAVANDA PLATA',
-        '205,195,205': 'LAVANDA PERLA',
-        '200,190,200': 'LAVANDA NÁCAR',
-        '195,185,195': 'LILA CLARO SUAVE',
-        '190,180,190': 'LILA CLARO OSCURO',
-        '185,175,185': 'LILA MEDIO SUAVE',
-        '180,170,180': 'LILA MEDIO OSCURO',
-        '175,165,175': 'LILA OSCURO SUAVE',
-        '170,160,170': 'LILA OSCURO INTENSO',
-        '165,155,165': 'LILA PURPURA CLARO',
-        '160,150,160': 'LILA PURPURA SUAVE',
-        '155,145,155': 'LILA PURPURA OSCURO',
-        '150,140,150': 'LILA VIOLETA SUAVE',
-        '240,220,240': 'LAVANDA BEBÉ',
-        '235,215,235': 'LAVANDA BEBÉ SUAVE',
-        '230,210,230': 'LAVANDA BEBÉ CLARO',
-        '225,205,225': 'LAVANDA BEBÉ INTENSO',
-        '220,200,220': 'LAVANDA PERLA SUAVE',
-        '215,195,215': 'LAVANDA PERLA CLARO',
-        '210,190,210': 'LAVANDA PERLA INTENSO',
-        '205,185,205': 'LILA ORQUÍDEA SUAVE',
-        '200,180,200': 'LILA ORQUÍDEA CLARO',
-        '195,175,195': 'LILA ORQUÍDEA INTENSO',
-        '190,170,190': 'LILA MALVA SUAVE',
-        '185,165,185': 'LILA MALVA CLARO',
-        '180,160,180': 'LILA MALVA INTENSO',
-        '175,155,175': 'LILA CARDENAL SUAVE',
-        '170,150,170': 'LILA CARDENAL CLARO',
-        '165,145,165': 'LILA CARDENAL INTENSO',
-        '160,140,160': 'LILA AMATISTA SUAVE',
-        '155,135,155': 'LILA AMATISTA CLARO',
-        '150,130,150': 'LILA AMATISTA INTENSO',
-        '145,125,145': 'LILA AMATISTA OSCURO',
-
-        // ==================== VERDES NEÓN (40 colores) ====================
-        '57,255,20': 'VERDE NEÓN',
-        '0,255,127': 'VERDE MENTA',
-        '50,205,50': 'VERDE LIMÓN',
-        '124,252,0': 'VERDE MANZANA',
-        '127,255,0': 'VERDE AMARILLENTO',
-        '0,250,154': 'VERDE MEDIO PRIMAVERA',
-        '60,179,113': 'VERDE MAR',
-        '64,224,208': 'VERDE TURQUESA',
-        '48,213,200': 'VERDE MENTA CLARO',
-        '40,200,150': 'VERDE JADE',
-        '35,180,140': 'VERDE AGUAMARINA',
-        '30,160,130': 'VERDE CRISTAL',
-        '25,140,120': 'VERDE MILENIO',
-        '20,120,110': 'VERDE SELVA',
-        '15,100,100': 'VERDE PROFUNDO',
-        '10,80,90': 'VERDE OSCURO',
-        '5,60,80': 'VERDE BOSQUE OSCURO',
-        '0,128,128': 'VERDE TURQUESA OSCURO',
-        '0,100,100': 'VERDE PETRÓLEO',
-        '0,80,80': 'VERDE CASA',
-        '0,255,0': 'VERDE NEÓN FUERTE',
-        '0,230,0': 'VERDE NEÓN CLARO',
-        '0,205,0': 'VERDE NEÓN OSCURO',
-        '0,180,0': 'VERDE NEÓN INTENSO',
-        '0,155,0': 'VERDE NEÓN MEDIO',
-        '0,130,0': 'VERDE NEÓN SUAVE',
-        '0,105,0': 'VERDE NEÓN GRIS',
-        '0,80,0': 'VERDE NEÓN METAL',
-        '0,55,0': 'VERDE NEÓN ACERO',
-        '0,30,0': 'VERDE NEÓN HIERRO',
-        '100,255,100': 'VERDE NEÓN CLARÍSIMO',
-        '80,255,80': 'VERDE NEÓN BRILLANTE',
-        '60,255,60': 'VERDE NEÓN SATURADO',
-        '40,255,40': 'VERDE NEÓN INTENSIDAD',
-        '20,255,20': 'VERDE NEÓN MÁXIMO',
-        '0,255,50': 'VERDE MENTA NEÓN',
-        '0,255,80': 'VERDE MENTA BRILLANTE',
-        '0,255,110': 'VERDE MENTA SATURADO',
-        '0,255,140': 'VERDE MENTA INTENSO',
-        '0,255,170': 'VERDE MENTA SUAVE',
-        '0,255,200': 'VERDE MENTA CLARO',
-
-        // ==================== METÁLICOS Y ESPECIALES (50 colores) ====================
-        '212,175,55': 'ORO METÁLICO',
-        '192,192,192': 'PLATA',
-        '205,127,50': 'BRONCE',
-        '184,115,51': 'COBRE',
-        '140,100,60': 'LATÓN',
-        '200,150,100': 'DORADO',
-        '220,180,120': 'BRILLANTE',
-        '230,190,130': 'METAL CLARO',
-        '240,200,140': 'METAL OSCURO',
-        '250,210,150': 'METAL PULIDO',
-        '210,160,80': 'METAL ANTIGUO',
-        '190,140,70': 'METAL RUSTICO',
-        '170,120,60': 'METAL VIEJO',
-        '150,100,50': 'METAL QUEMADO',
-        '130,80,40': 'METAL OCRE',
-        '110,60,30': 'METAL TIERRA',
-        '90,40,20': 'METAL PROFUNDO',
-        '70,20,10': 'METAL NOBLE',
-        '50,10,5': 'METAL PRECIOSO',
-        '30,5,2': 'METAL EXÓTICO',
-        '218,165,32': 'ORO METÁLICO CLARO',
-        '205,150,25': 'ORO METÁLICO OSCURO',
-        '190,135,20': 'ORO METÁLICO INTENSO',
-        '175,120,15': 'ORO METÁLICO SUAVE',
-        '160,105,10': 'ORO METÁLICO GRIS',
-        '145,90,5': 'ORO METÁLICO PLOMO',
-        '200,200,200': 'PLATA METÁLICA',
-        '190,190,190': 'PLATA BRILLANTE',
-        '180,180,180': 'PLATA OSCURA',
-        '170,170,170': 'PLATA SUAVE',
-        '160,160,160': 'PLATA GRIS',
-        '150,150,150': 'PLATA ACERO',
-        '140,140,140': 'PLATA HIERRO',
-        '130,130,130': 'BRONCE METÁLICO',
-        '120,120,120': 'BRONCE BRILLANTE',
-        '110,110,110': 'BRONCE OSCURO',
-        '100,100,100': 'BRONCE SUAVE',
-        '90,90,90': 'BRONCE GRIS',
-        '80,80,80': 'BRONCE ACERO',
-        '70,70,70': 'BRONCE HIERRO',
-        '200,160,80': 'LATÓN METÁLICO',
-        '190,150,75': 'LATÓN BRILLANTE',
-        '180,140,70': 'LATÓN OSCURO',
-        '170,130,65': 'LATÓN SUAVE',
-        '160,120,60': 'LATÓN GRIS',
-        '150,110,55': 'LATÓN ACERO',
-        '140,100,50': 'LATÓN HIERRO',
-        '130,90,45': 'COBRE METÁLICO',
-        '120,80,40': 'COBRE BRILLANTE',
-        '110,70,35': 'COBRE OSCURO',
-        '100,60,30': 'COBRE SUAVE',
-
-        // ==================== COLORES DE MARCAS FAMOSAS (50 colores) ====================
-        '0,166,81': 'VERDE SPOTIFY',
-        '29,161,242': 'AZUL TWITTER',
-        '24,119,242': 'AZUL FACEBOOK',
-        '225,48,108': 'ROSA INSTAGRAM',
-        '255,69,0': 'NARANJA REDDIT',
-        '0,119,181': 'AZUL LINKEDIN',
-        '255,204,0': 'AMARILLO SNAPCHAT',
-        '80,227,194': 'VERDE TIKTOK',
-        '255,80,80': 'ROJO YOUTUBE',
-        '66,133,244': 'AZUL GOOGLE',
-        '219,68,55': 'ROJO GOOGLE',
-        '244,180,0': 'AMARILLO GOOGLE',
-        '15,157,88': 'VERDE GOOGLE',
-        '0,0,0': 'NEGRO NETFLIX',
-        '229,9,20': 'ROJO NETFLIX',
-        '0,113,194': 'AZUL TELEGRAM',
-        '0,132,255': 'AZUL DISCORD',
-        '88,101,242': 'AZUL SLACK',
-        '236,72,38': 'NARANJA MASTODON',
-        '0,172,237': 'AZUL MICROSOFT',
-        '255,185,0': 'AMARILLO MICROSOFT',
-        '80,80,80': 'GRIS MICROSOFT',
-        '255,103,31': 'NARANJA MERCEDES',
-        '0,51,102': 'AZUL BMW',
-        '204,0,0': 'ROJO FERRARI',
-        '0,0,0': 'NEGRO TESLA',
-        '230,0,0': 'ROJO COCA COLA',
-        '0,70,128': 'AZUL PEPSI',
-        '255,0,0': 'ROJO NETFLIX',
-        '0,0,0': 'NEGRO NIKE',
-        '255,0,0': 'ROJO ADIDAS',
-        '238,130,238': 'VIOLETA YAHOO',
-        '0,0,0': 'NEGRO PUMA',
-        '255,223,0': 'AMARILLO UPS',
-        '0,51,160': 'AZUL DELL',
-        '0,122,80': 'VERDE STARBUCKS',
-        '0,0,0': 'NEGRO CHANEL',
-        '255,255,255': 'BLANCO APPLE',
-        '80,80,80': 'GRIS APPLE',
-        '0,0,0': 'NEGRO SAMSUNG',
-        '0,175,240': 'CIAN TWITCH',
-        '255,100,0': 'NARANJA FANATICS',
-        '0,0,0': 'NEGRO DISNEY',
-        '0,0,0': 'NEGRO HBO',
-        '0,0,0': 'NEGRO SPOTIFY',
-        '0,0,0': 'NEGRO SHOPIFY',
-        '0,0,0': 'NEGRO UBER',
-        '0,0,0': 'NEGRO AIRBNB',
-        '0,0,0': 'NEGRO DROPBOX',
-        '0,0,0': 'NEGRO SLACK'
-    };
-        
-        function getColorName(r,g,b) {
-            const key = `${r},${g},${b}`;
-            if (colorNames[key]) return colorNames[key];
-            let best = 'COLOR PERSONALIZADO', bestDist = 100;
-            for (let [k, name] of Object.entries(colorNames)) {
-                const [cr,cg,cb] = k.split(',').map(Number);
-                const dist = Math.abs(cr-r)+Math.abs(cg-g)+Math.abs(cb-b);
-                if (dist < bestDist) { bestDist = dist; best = name; }
+                console.log('✅ Base de datos cargada:', Object.keys(colorNames).length, 'colores');
+                updateColor();
+                return true;
+            } catch (error) {
+                console.warn('⚠️ Usando base de datos de respaldo');
+                colorNames = getFallbackColors();
+                updateColor();
+                return false;
             }
+        }
+
+        // ==================== BASE DE DATOS DE RESPALDO ====================
+        function getFallbackColors() {
+            return {
+                '255,0,0': 'ROJO CADMIO',
+                '0,0,255': 'AZUL COBALTO',
+                '0,255,0': 'VERDE ESMERALDA',
+                '255,255,0': 'AMARILLO CADMIO',
+                '255,165,0': 'NARANJA',
+                '128,0,128': 'PÚRPURA',
+                '255,255,255': 'BLANCO',
+                '0,0,0': 'NEGRO'
+            };
+        }
+
+        // ==================== FUNCIÓN PARA OBTENER NOMBRE ====================
+        function getColorName(r, g, b) {
+            const key = `${r},${g},${b}`;
+
+            // Buscar coincidencia exacta
+            if (colorNames[key]) {
+                return colorNames[key];
+            }
+
+            // Buscar el color más cercano
+            let best = 'COLOR PERSONALIZADO';
+            let bestDist = 100;
+
+            for (let [k, name] of Object.entries(colorNames)) {
+                const [cr, cg, cb] = k.split(',').map(Number);
+                const dist = Math.abs(cr - r) + Math.abs(cg - g) + Math.abs(cb - b);
+                if (dist < bestDist) {
+                    bestDist = dist;
+                    best = name;
+                }
+            }
+
             return bestDist < 80 ? best : 'COLOR PERSONALIZADO';
         }
-        
+
         // ==================== HSV/RGB ====================
-        function hsvToRgb(h,s,v) {
-            h = (h%360)/360;
-            s = Math.min(100,Math.max(0,s))/100;
-            v = Math.min(100,Math.max(0,v))/100;
-            let r,g,b;
-            const i = Math.floor(h*6);
-            const f = h*6 - i;
-            const p = v*(1-s);
-            const q = v*(1-f*s);
-            const t = v*(1-(1-f)*s);
-            switch(i%6){
-                case 0: r=v; g=t; b=p; break;
-                case 1: r=q; g=v; b=p; break;
-                case 2: r=p; g=v; b=t; break;
-                case 3: r=p; g=q; b=v; break;
-                case 4: r=t; g=p; b=v; break;
-                default: r=v; g=p; b=q;
+        function hsvToRgb(h, s, v) {
+            h = (h % 360) / 360;
+            s = Math.min(100, Math.max(0, s)) / 100;
+            v = Math.min(100, Math.max(0, v)) / 100;
+            let r, g, b;
+            const i = Math.floor(h * 6);
+            const f = h * 6 - i;
+            const p = v * (1 - s);
+            const q = v * (1 - f * s);
+            const t = v * (1 - (1 - f) * s);
+            switch (i % 6) {
+                case 0: r = v;
+                g = t;
+                b = p;
+                break;
+                case 1: r = q;
+                g = v;
+                b = p;
+                break;
+                case 2: r = p;
+                g = v;
+                b = t;
+                break;
+                case 3: r = p;
+                g = q;
+                b = v;
+                break;
+                case 4: r = t;
+                g = p;
+                b = v;
+                break;
+                default: r = v;
+                g = p;
+                b = q;
             }
-            return { r:Math.round(r*255), g:Math.round(g*255), b:Math.round(b*255) };
+            return { r: Math.round(r * 255), g: Math.round(g * 255), b: Math.round(b * 255) };
         }
-        
-        function rgbToHsv(r,g,b) {
-            r/=255; g/=255; b/=255;
-            const max = Math.max(r,g,b), min = Math.min(r,g,b);
-            let h,s,v=max;
-            const d = max-min;
-            s = max===0 ? 0 : d/max;
-            if(max===min) h=0;
+
+        function rgbToHsv(r, g, b) {
+            r /= 255;
+            g /= 255;
+            b /= 255;
+            const max = Math.max(r, g, b),
+                min = Math.min(r, g, b);
+            let h, s, v = max;
+            const d = max - min;
+            s = max === 0 ? 0 : d / max;
+            if (max === min) h = 0;
             else {
-                switch(max){
-                    case r: h=(g-b)/d+(g<b?6:0); break;
-                    case g: h=(b-r)/d+2; break;
-                    default: h=(r-g)/d+4;
+                switch (max) {
+                    case r:
+                        h = (g - b) / d + (g < b ? 6 : 0);
+                        break;
+                    case g:
+                        h = (b - r) / d + 2;
+                        break;
+                    default:
+                        h = (r - g) / d + 4;
                 }
-                h/=6;
+                h /= 6;
             }
-            return { h:h*360, s:s*100, v:v*100 };
+            return { h: h * 360, s: s * 100, v: v * 100 };
         }
-        
-        function rgbToHex(r,g,b) {
-            return '#'+[r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('').toUpperCase();
+
+        function rgbToHex(r, g, b) {
+            return '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
         }
-        
+
+        // ==================== ACTUALIZAR UI ====================
         function updateColor() {
             currentColor = hsvToRgb(currentHue, currentSat, currentVal);
             const hex = rgbToHex(currentColor.r, currentColor.g, currentColor.b);
+            const rgb = `rgb(${currentColor.r},${currentColor.g},${currentColor.b})`;
+            const hsv = rgbToHsv(currentColor.r, currentColor.g, currentColor.b);
+            const hsvStr = `hsv(${Math.round(hsv.h)}°,${Math.round(hsv.s)}%,${Math.round(hsv.v)}%)`;
+
             colorSwatch.style.backgroundColor = hex;
-            rgbSpan.innerHTML = `rgb(${currentColor.r},${currentColor.g},${currentColor.b})<button class="copy-badge" data-copy="rgb">📋</button>`;
+            colorNameSpan.innerText = getColorName(currentColor.r, currentColor.g, currentColor.b);
+
+            rgbSpan.innerHTML = `${rgb}<button class="copy-badge" data-copy="rgb">📋</button>`;
             hexSpan.innerHTML = `${hex}<button class="copy-badge" data-copy="hex">📋</button>`;
-            const hsv = rgbToHsv(currentColor.r,currentColor.g,currentColor.b);
-            hsvSpan.innerHTML = `hsv(${Math.round(hsv.h)}°,${Math.round(hsv.s)}%,${Math.round(hsv.v)}%)<button class="copy-badge" data-copy="hsv">📋</button>`;
-            colorNameSpan.innerText = getColorName(currentColor.r,currentColor.g,currentColor.b);
-            
-            document.getElementById('hueVal').innerText = Math.round(currentHue)+'°';
-            document.getElementById('satVal').innerText = Math.round(currentSat)+'%';
-            document.getElementById('valVal').innerText = Math.round(currentVal)+'%';
-            
+            hsvSpan.innerHTML = `${hsvStr}<button class="copy-badge" data-copy="hsv">📋</button>`;
+
+            document.getElementById('hueVal').innerText = Math.round(currentHue) + '°';
+            document.getElementById('satVal').innerText = Math.round(currentSat) + '%';
+            document.getElementById('valVal').innerText = Math.round(currentVal) + '%';
+
             updateContrast();
             updateGradient();
             updateHarmonic();
@@ -1761,37 +918,39 @@
             updateCssVariables();
             updateStats();
         }
-        
+
         // ==================== RULETA ====================
         let centerX, centerY, radii = [];
         const zoneSats = [100, 80, 60, 40, 20];
         const zoneNames = ['PURO', 'VIVO', 'NORMAL', 'SUAVE', 'PASTEL'];
-        
+
         function drawWheel() {
-            const w = wheelCanvas.width, h = wheelCanvas.height;
-            centerX = w/2; centerY = h/2;
-            const maxR = w/2 - 10;
+            const w = wheelCanvas.width,
+                h = wheelCanvas.height;
+            centerX = w / 2;
+            centerY = h / 2;
+            const maxR = w / 2 - 10;
             radii = [];
-            for(let i=0;i<5;i++) {
-                radii.push({ outer: maxR - (i*(maxR/5)), inner: maxR - ((i+1)*(maxR/5)) });
+            for (let i = 0; i < 5; i++) {
+                radii.push({ outer: maxR - (i * (maxR / 5)), inner: maxR - ((i + 1) * (maxR / 5)) });
             }
             radii.reverse();
             const segments = 360;
-            for(let l=0;l<5;l++) {
-                for(let i=0;i<segments;i++) {
-                    const start = (i/segments)*Math.PI*2;
-                    const end = ((i+1)/segments)*Math.PI*2;
-                    const hue = (i/segments)*360;
+            for (let l = 0; l < 5; l++) {
+                for (let i = 0; i < segments; i++) {
+                    const start = (i / segments) * Math.PI * 2;
+                    const end = ((i + 1) / segments) * Math.PI * 2;
+                    const hue = (i / segments) * 360;
                     const rgb = hsvToRgb(hue, zoneSats[l], 95);
                     ctx.beginPath();
-                    ctx.arc(centerX,centerY,radii[l].outer,start,end);
-                    ctx.arc(centerX,centerY,radii[l].inner,end,start,true);
+                    ctx.arc(centerX, centerY, radii[l].outer, start, end);
+                    ctx.arc(centerX, centerY, radii[l].inner, end, start, true);
                     ctx.fillStyle = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
                     ctx.fill();
                 }
             }
             ctx.beginPath();
-            ctx.arc(centerX,centerY,radii[4].inner*0.3,0,Math.PI*2);
+            ctx.arc(centerX, centerY, radii[4].inner * 0.3, 0, Math.PI * 2);
             ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--surface').trim() || '#ffffff';
             ctx.fill();
             ctx.fillStyle = getComputedStyle(document.body).getPropertyValue('--text').trim() || '#1a1f2e';
@@ -1800,29 +959,30 @@
             ctx.textBaseline = "middle";
             ctx.fillText("🎨", centerX, centerY);
         }
-        
+
         function getColorFromWheel(e) {
             const rect = wheelCanvas.getBoundingClientRect();
-            const scale = wheelCanvas.width/rect.width;
-            let mx = (e.clientX - rect.left)*scale;
-            let my = (e.clientY - rect.top)*scale;
-            const dx = mx-centerX, dy = my-centerY;
-            const dist = Math.hypot(dx,dy);
-            let angle = Math.atan2(dy,dx);
-            if(angle<0) angle+=Math.PI*2;
-            const hue = (angle/(Math.PI*2))*360;
-            let level=-1;
-            for(let i=0;i<5;i++) {
-                if(dist <= radii[i].outer && dist >= radii[i].inner) { level=i; break; }
+            const scale = wheelCanvas.width / rect.width;
+            let mx = (e.clientX - rect.left) * scale;
+            let my = (e.clientY - rect.top) * scale;
+            const dx = mx - centerX,
+                dy = my - centerY;
+            const dist = Math.hypot(dx, dy);
+            let angle = Math.atan2(dy, dx);
+            if (angle < 0) angle += Math.PI * 2;
+            const hue = (angle / (Math.PI * 2)) * 360;
+            let level = -1;
+            for (let i = 0; i < 5; i++) {
+                if (dist <= radii[i].outer && dist >= radii[i].inner) { level = i; break; }
             }
-            if(level===-1) return null;
+            if (level === -1) return null;
             return hsvToRgb(hue, zoneSats[level], currentVal);
         }
-        
+
         wheelCanvas.addEventListener('click', (e) => {
             const col = getColorFromWheel(e);
-            if(col) {
-                const hsv = rgbToHsv(col.r,col.g,col.b);
+            if (col) {
+                const hsv = rgbToHsv(col.r, col.g, col.b);
                 currentHue = hsv.h;
                 currentSat = hsv.s;
                 currentVal = hsv.v;
@@ -1830,60 +990,61 @@
                 showToast(`🎨 ${zoneNames[Math.floor(Math.random()*5)]} SELECCIONADO`);
             }
         });
-        
+
         // ==================== CONTRASTE ====================
-        function getLuminance(r,g,b) {
-            let [rs,gs,bs] = [r/255, g/255, b/255];
-            rs = rs <= 0.03928 ? rs/12.92 : Math.pow((rs+0.055)/1.055,2.4);
-            gs = gs <= 0.03928 ? gs/12.92 : Math.pow((gs+0.055)/1.055,2.4);
-            bs = bs <= 0.03928 ? bs/12.92 : Math.pow((bs+0.055)/1.055,2.4);
-            return 0.2126*rs + 0.7152*gs + 0.0722*bs;
+        function getLuminance(r, g, b) {
+            let [rs, gs, bs] = [r / 255, g / 255, b / 255];
+            rs = rs <= 0.03928 ? rs / 12.92 : Math.pow((rs + 0.055) / 1.055, 2.4);
+            gs = gs <= 0.03928 ? gs / 12.92 : Math.pow((gs + 0.055) / 1.055, 2.4);
+            bs = bs <= 0.03928 ? bs / 12.92 : Math.pow((bs + 0.055) / 1.055, 2.4);
+            return 0.2126 * rs + 0.7152 * gs + 0.0722 * bs;
         }
-        
-        function getContrast(l1,l2) {
-            const light = Math.max(l1,l2), dark = Math.min(l1,l2);
-            return ((light+0.05)/(dark+0.05)).toFixed(2);
+
+        function getContrast(l1, l2) {
+            const light = Math.max(l1, l2),
+                dark = Math.min(l1, l2);
+            return ((light + 0.05) / (dark + 0.05)).toFixed(2);
         }
-        
+
         function updateContrast() {
-            const lum = getLuminance(currentColor.r,currentColor.g,currentColor.b);
-            const lumW = getLuminance(255,255,255);
-            const lumB = getLuminance(0,0,0);
+            const lum = getLuminance(currentColor.r, currentColor.g, currentColor.b);
+            const lumW = getLuminance(255, 255, 255);
+            const lumB = getLuminance(0, 0, 0);
             const whiteRatio = getContrast(lum, lumW);
             const blackRatio = getContrast(lum, lumB);
             document.getElementById('whiteRatio').innerHTML = whiteRatio;
             document.getElementById('blackRatio').innerHTML = blackRatio;
             let msg = '';
-            if(whiteRatio >= 7) msg += '✅ AAA SOBRE BLANCO ';
-            else if(whiteRatio >= 4.5) msg += '✅ AA SOBRE BLANCO ';
-            else msg += ' MEJORABLE BLANCO ';
-            if(blackRatio >= 7) msg += '✅ AAA SOBRE NEGRO';
-            else if(blackRatio >= 4.5) msg += '✅ AA SOBRE NEGRO';
-            else msg += ' MEJORABLE NEGRO';
+            if (whiteRatio >= 7) msg += '✅ AAA SOBRE BLANCO ';
+            else if (whiteRatio >= 4.5) msg += '✅ AA SOBRE BLANCO ';
+            else msg += '❌ MEJORABLE BLANCO ';
+            if (blackRatio >= 7) msg += '✅ AAA SOBRE NEGRO';
+            else if (blackRatio >= 4.5) msg += '✅ AA SOBRE NEGRO';
+            else msg += '❌ MEJORABLE NEGRO';
             document.getElementById('wcagMsg').innerHTML = msg;
             document.getElementById('statsContrast').innerHTML = whiteRatio;
         }
-        
+
         // ==================== GRADIENTE ====================
         function updateGradient() {
             const hex = rgbToHex(currentColor.r, currentColor.g, currentColor.b);
-            const comp = hsvToRgb((currentHue+180)%360, currentSat, currentVal);
+            const comp = hsvToRgb((currentHue + 180) % 360, currentSat, currentVal);
             const compHex = rgbToHex(comp.r, comp.g, comp.b);
             const grad = `linear-gradient(135deg, ${hex}, ${compHex})`;
             document.getElementById('gradientPreview').style.background = grad;
             document.getElementById('gradientCode').innerHTML = `background: ${grad};`;
         }
-        
+
         // ==================== ARMONÍAS ====================
         function getHarmonic(hue, type) {
             const arr = [];
-            if(type==='complementary') arr.push(hue, (hue+180)%360);
-            else if(type==='analogous') arr.push(hue, (hue+30)%360, (hue-30+360)%360);
-            else if(type==='triadic') arr.push(hue, (hue+120)%360, (hue+240)%360);
-            else if(type==='tetradic') arr.push(hue, (hue+90)%360, (hue+180)%360, (hue+270)%360);
+            if (type === 'complementary') arr.push(hue, (hue + 180) % 360);
+            else if (type === 'analogous') arr.push(hue, (hue + 30) % 360, (hue - 30 + 360) % 360);
+            else if (type === 'triadic') arr.push(hue, (hue + 120) % 360, (hue + 240) % 360);
+            else if (type === 'tetradic') arr.push(hue, (hue + 90) % 360, (hue + 180) % 360, (hue + 270) % 360);
             return arr;
         }
-        
+
         function updateHarmonic() {
             const active = document.querySelector('.harmony-btn.active').dataset.harmony;
             const hues = getHarmonic(currentHue, active);
@@ -1902,16 +1063,18 @@
             });
             document.getElementById('statsHarmony').innerHTML = hues.length;
         }
-        
+
+        // ==================== SUGERENCIAS ====================
         function updateSuggestions() {
             const container = document.getElementById('suggestionsGrid');
             const suggestions = [
-                (currentHue+15)%360, (currentHue-15+360)%360,
-                (currentHue+45)%360, (currentHue-45+360)%360
+                (currentHue + 15) % 360, (currentHue - 15 + 360) % 360,
+                (currentHue + 45) % 360, (currentHue - 45 + 360) % 360,
+                (currentHue + 75) % 360, (currentHue - 75 + 360) % 360
             ];
             container.innerHTML = '';
             suggestions.forEach(hue => {
-                const rgb = hsvToRgb(hue, Math.min(100, currentSat+10), Math.min(100, currentVal+10));
+                const rgb = hsvToRgb(hue, Math.min(100, currentSat + 10), Math.min(100, currentVal + 10));
                 const sw = document.createElement('div');
                 sw.className = 'harmony-swatch';
                 sw.style.backgroundColor = `rgb(${rgb.r},${rgb.g},${rgb.b})`;
@@ -1922,11 +1085,11 @@
                 container.appendChild(sw);
             });
         }
-        
+
         // ==================== PALETA ====================
         function updatePalette() {
             const grid = document.getElementById('paletteGrid');
-            if(customColors.length===0) {
+            if (customColors.length === 0) {
                 grid.innerHTML = '<div class="empty-state">✨ GUARDA TUS COLORES FAVORITOS</div>';
                 return;
             }
@@ -1937,38 +1100,46 @@
                 item.style.backgroundColor = `rgb(${col.r},${col.g},${col.b})`;
                 item.onclick = () => {
                     currentColor = {...col};
-                    const hsv = rgbToHsv(col.r,col.g,col.b);
-                    currentHue = hsv.h; currentSat = hsv.s; currentVal = hsv.v;
+                    const hsv = rgbToHsv(col.r, col.g, col.b);
+                    currentHue = hsv.h;
+                    currentSat = hsv.s;
+                    currentVal = hsv.v;
                     updateColor();
                 };
                 const del = document.createElement('button');
                 del.className = 'palette-delete';
                 del.innerHTML = '✕';
-                del.onclick = (e) => { e.stopPropagation(); customColors.splice(idx,1); updatePalette(); saveData(); };
+                del.onclick = (e) => {
+                    e.stopPropagation();
+                    customColors.splice(idx, 1);
+                    updatePalette();
+                    saveData();
+                };
                 item.appendChild(del);
                 grid.appendChild(item);
             });
         }
-        
+
+        // ==================== DATA ====================
         function saveData() {
             localStorage.setItem('chromatica_palette', JSON.stringify(customColors));
             updateStats();
         }
-        
+
         function updateStats() {
             document.getElementById('statsColors').innerHTML = customColors.length;
         }
-        
+
         function updateCssVariables() {
             let css = ':root {\n';
-            customColors.slice(0,6).forEach((col, idx) => {
+            customColors.slice(0, 6).forEach((col, idx) => {
                 const hex = rgbToHex(col.r, col.g, col.b);
                 css += `  --color-${idx+1}: ${hex};\n`;
             });
             css += '}';
             document.getElementById('cssVariables').innerHTML = css || ':root { /* GUARDA COLORES PARA GENERAR VARIABLES */ }';
         }
-        
+
         // ==================== EXPORTAR COLOR COMO PNG ====================
         async function exportColorAsPNG() {
             const canvas = document.createElement('canvas');
@@ -1976,17 +1147,15 @@
             canvas.width = size;
             canvas.height = size;
             const ctxCanvas = canvas.getContext('2d');
-            
+
             const hex = rgbToHex(currentColor.r, currentColor.g, currentColor.b);
             const rgb = `RGB(${currentColor.r}, ${currentColor.g}, ${currentColor.b})`;
-            
-            // Fondo
+
             ctxCanvas.fillStyle = hex;
             ctxCanvas.fillRect(0, 0, size, size);
-            
-            // Círculo pequeño (discreto - 18% del tamaño)
+
             ctxCanvas.beginPath();
-            ctxCanvas.arc(size/2, size/2, size * 0.18, 0, Math.PI * 2);
+            ctxCanvas.arc(size / 2, size / 2, size * 0.18, 0, Math.PI * 2);
             ctxCanvas.fillStyle = hex;
             ctxCanvas.fill();
             ctxCanvas.shadowBlur = 10;
@@ -1995,105 +1164,98 @@
             ctxCanvas.lineWidth = 2;
             ctxCanvas.stroke();
             ctxCanvas.shadowBlur = 0;
-            
-            // Texto principal
+
             ctxCanvas.font = `bold ${size * 0.045}px 'Inter', sans-serif`;
             ctxCanvas.fillStyle = getLuminance(currentColor.r, currentColor.g, currentColor.b) > 0.5 ? '#1a1f2e' : '#ffffff';
             ctxCanvas.textAlign = "center";
-            ctxCanvas.fillText(colorNameSpan.innerText, size/2, size * 0.22);
-            
+            ctxCanvas.fillText(colorNameSpan.innerText, size / 2, size * 0.22);
+
             ctxCanvas.font = `${size * 0.04}px 'Inter', monospace`;
             ctxCanvas.fillStyle = getLuminance(currentColor.r, currentColor.g, currentColor.b) > 0.5 ? '#1a1f2e' : '#ffffff';
-            ctxCanvas.fillText(rgb, size/2, size * 0.32);
-            
+            ctxCanvas.fillText(rgb, size / 2, size * 0.32);
+
             ctxCanvas.font = `${size * 0.035}px 'Inter', monospace`;
             ctxCanvas.fillStyle = getLuminance(currentColor.r, currentColor.g, currentColor.b) > 0.5 ? '#666' : '#aaa';
-            ctxCanvas.fillText(hex, size/2, size * 0.41);
-            
-            // Línea decorativa
+            ctxCanvas.fillText(hex, size / 2, size * 0.41);
+
             ctxCanvas.beginPath();
             ctxCanvas.moveTo(size * 0.25, size * 0.48);
             ctxCanvas.lineTo(size * 0.75, size * 0.48);
             ctxCanvas.strokeStyle = getLuminance(currentColor.r, currentColor.g, currentColor.b) > 0.5 ? '#ddd' : '#444';
             ctxCanvas.lineWidth = 0.5;
             ctxCanvas.stroke();
-            
-            // Información adicional
+
             const hsv = rgbToHsv(currentColor.r, currentColor.g, currentColor.b);
             ctxCanvas.font = `${size * 0.022}px 'Inter', monospace`;
             ctxCanvas.fillStyle = getLuminance(currentColor.r, currentColor.g, currentColor.b) > 0.5 ? '#888' : '#777';
-            ctxCanvas.fillText(`HSV: ${Math.round(hsv.h)}° · ${Math.round(hsv.s)}% · ${Math.round(hsv.v)}%`, size/2, size * 0.56);
-            
-            // Marca de agua pequeña (esquina inferior derecha)
+            ctxCanvas.fillText(`HSV: ${Math.round(hsv.h)}° · ${Math.round(hsv.s)}% · ${Math.round(hsv.v)}%`, size / 2, size * 0.56);
+
             ctxCanvas.font = `${size * 0.018}px 'Inter', sans-serif`;
             ctxCanvas.fillStyle = getLuminance(currentColor.r, currentColor.g, currentColor.b) > 0.5 ? '#ccc' : '#555';
             ctxCanvas.textAlign = "right";
             ctxCanvas.fillText("CHROMATIC.APP", size - 15, size - 12);
-            
+
             const link = document.createElement('a');
             link.download = `CHROMATIC-${hex.replace('#', '')}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
             showToast(' COLOR EXPORTADO COMO PNG');
         }
-        
-        // ==================== EXPORTAR GRADIENTE COMO PNG (SOLO GRADIENTE) ====================
+
+        // ==================== EXPORTAR GRADIENTE COMO PNG ====================
         async function exportGradientAsPNG() {
             const canvas = document.createElement('canvas');
             const size = 600;
             canvas.width = size;
             canvas.height = size;
             const ctxCanvas = canvas.getContext('2d');
-            
+
             const hex = rgbToHex(currentColor.r, currentColor.g, currentColor.b);
-            const comp = hsvToRgb((currentHue+180)%360, currentSat, currentVal);
+            const comp = hsvToRgb((currentHue + 180) % 360, currentSat, currentVal);
             const compHex = rgbToHex(comp.r, comp.g, comp.b);
-            
-            // Gradiente puro de esquina a esquina
+
             const grad = ctxCanvas.createLinearGradient(0, 0, size, size);
             grad.addColorStop(0, hex);
             grad.addColorStop(1, compHex);
-            
+
             ctxCanvas.fillStyle = grad;
             ctxCanvas.fillRect(0, 0, size, size);
-            
-            // SIN texto, SIN círculos, SIN marca de agua - SOLO EL GRADIENTE PURO
-            
+
             const link = document.createElement('a');
             link.download = `CHROMATIC-GRADIENT-${hex.replace('#', '')}.png`;
             link.href = canvas.toDataURL('image/png');
             link.click();
             showToast(' GRADIENTE EXPORTADO COMO PNG');
         }
-        
+
         // ==================== ACCIONES ====================
         function saveCurrentColor() {
             customColors.unshift({...currentColor});
-            if(customColors.length > 20) customColors.pop();
+            if (customColors.length > 24) customColors.pop();
             updatePalette();
             saveData();
             showToast(' COLOR GUARDADO');
         }
-        
+
         function clearPalette() {
-            if(confirm('¿ELIMINAR TODOS LOS COLORES?')) {
+            if (confirm('¿ELIMINAR TODOS LOS COLORES?')) {
                 customColors = [];
                 updatePalette();
                 saveData();
                 showToast(' PALETA LIMPIADA');
             }
         }
-        
+
         function exportData() {
             const data = { palette: customColors, exportDate: new Date().toISOString() };
-            const blob = new Blob([JSON.stringify(data,null,2)], {type:'application/json'});
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
             const link = document.createElement('a');
             link.download = `chromatic-${Date.now()}.json`;
             link.href = URL.createObjectURL(blob);
             link.click();
             showToast(' DATOS EXPORTADOS');
         }
-        
+
         function importData() {
             const input = document.createElement('input');
             input.type = 'file';
@@ -2104,17 +1266,19 @@
                 reader.onload = (ev) => {
                     try {
                         const data = JSON.parse(ev.target.result);
-                        if(data.palette) customColors = data.palette;
+                        if (data.palette) customColors = data.palette;
                         updatePalette();
                         saveData();
                         showToast(' DATOS IMPORTADOS');
-                    } catch(err) { showToast('❌ ERROR AL IMPORTAR'); }
+                    } catch (err) {
+                        showToast(' ERROR AL IMPORTAR');
+                    }
                 };
                 reader.readAsText(file);
             };
             input.click();
         }
-        
+
         function showToast(msg) {
             const t = document.createElement('div');
             t.className = 'toast';
@@ -2122,20 +1286,30 @@
             document.body.appendChild(t);
             setTimeout(() => t.remove(), 2000);
         }
-        
+
         // ==================== EVENTOS ====================
-        hueSlider.oninput = () => { currentHue = parseFloat(hueSlider.value); updateColor(); drawWheel(); };
-        satSlider.oninput = () => { currentSat = parseFloat(satSlider.value); updateColor(); };
-        valSlider.oninput = () => { currentVal = parseFloat(valSlider.value); updateColor(); };
-        
+        hueSlider.oninput = () => {
+            currentHue = parseFloat(hueSlider.value);
+            updateColor();
+            drawWheel();
+        };
+        satSlider.oninput = () => {
+            currentSat = parseFloat(satSlider.value);
+            updateColor();
+        };
+        valSlider.oninput = () => {
+            currentVal = parseFloat(valSlider.value);
+            updateColor();
+        };
+
         document.querySelectorAll('.harmony-btn').forEach(btn => {
             btn.onclick = () => {
-                document.querySelectorAll('.harmony-btn').forEach(b=>b.classList.remove('active'));
+                document.querySelectorAll('.harmony-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 updateHarmonic();
             };
         });
-        
+
         document.getElementById('saveColorBtn').onclick = saveCurrentColor;
         document.getElementById('clearPaletteBtn').onclick = clearPalette;
         document.getElementById('exportColorBtn').onclick = exportColorAsPNG;
@@ -2150,37 +1324,47 @@
             navigator.clipboard.writeText(document.getElementById('cssVariables').innerText);
             showToast(' CSS VARIABLES COPIADAS');
         };
-        
+
         document.getElementById('themeToggleBtn').onclick = () => {
             document.body.classList.toggle('dark');
             localStorage.setItem('chromatica_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
             drawWheel();
         };
-        
+
         document.addEventListener('keydown', (e) => {
-            if(e.ctrlKey && e.key === 's') { e.preventDefault(); saveCurrentColor(); }
-            if(e.ctrlKey && e.key === 'g') { e.preventDefault(); document.getElementById('copyGradientBtn').click(); }
-            if(e.ctrlKey && e.key === 'd') { e.preventDefault(); document.getElementById('themeToggleBtn').click(); }
-            if(e.ctrlKey && e.key === 'e') { e.preventDefault(); exportColorAsPNG(); }
+            if (e.ctrlKey && e.key === 's') { e.preventDefault();
+                saveCurrentColor(); }
+            if (e.ctrlKey && e.key === 'g') { e.preventDefault();
+                document.getElementById('copyGradientBtn').click(); }
+            if (e.ctrlKey && e.key === 'd') { e.preventDefault();
+                document.getElementById('themeToggleBtn').click(); }
+            if (e.ctrlKey && e.key === 'e') { e.preventDefault();
+                exportColorAsPNG(); }
+            if (e.ctrlKey && e.key === 'i') { e.preventDefault();
+                importData(); }
         });
-        
+
         document.querySelectorAll('[data-copy]').forEach(btn => {
             btn.onclick = (e) => {
                 const type = e.target.closest('[data-copy]')?.dataset.copy;
-                if(type==='rgb') navigator.clipboard.writeText(`rgb(${currentColor.r},${currentColor.g},${currentColor.b})`);
-                if(type==='hex') navigator.clipboard.writeText(rgbToHex(currentColor.r,currentColor.g,currentColor.b));
-                if(type==='hsv') navigator.clipboard.writeText(`hsv(${Math.round(currentHue)}°,${Math.round(currentSat)}%,${Math.round(currentVal)}%)`);
+                if (type === 'rgb') navigator.clipboard.writeText(`rgb(${currentColor.r},${currentColor.g},${currentColor.b})`);
+                if (type === 'hex') navigator.clipboard.writeText(rgbToHex(currentColor.r, currentColor.g, currentColor.b));
+                if (type === 'hsv') navigator.clipboard.writeText(`hsv(${Math.round(currentHue)}°,${Math.round(currentSat)}%,${Math.round(currentVal)}%)`);
                 showToast(' COPIADO');
             };
         });
-        
+
         // ==================== INICIO ====================
         const savedTheme = localStorage.getItem('chromatica_theme');
-        if(savedTheme === 'dark') document.body.classList.add('dark');
-        
+        if (savedTheme === 'dark') document.body.classList.add('dark');
+
         drawWheel();
         updateColor();
         updatePalette();
+
+        // Cargar base de datos
+        loadColorDatabase();
+
     })();
 </script>
 </body>

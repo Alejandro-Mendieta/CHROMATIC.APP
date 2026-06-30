@@ -1,0 +1,1273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>📚 Editor de Base de Datos · CHROMATIC</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f5f6fa;
+            --surface: #ffffff;
+            --surface-2: #f1f3f7;
+            --text: #1a1f2e;
+            --text-2: #5a607a;
+            --border: #e8ecf2;
+            --accent: #4361ee;
+            --accent-2: #3a0ca3;
+            --success: #06d6a0;
+            --error: #ef476f;
+            --warning: #ffd166;
+            --shadow: 0 2px 10px rgba(0,0,0,0.05);
+            --radius: 16px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark {
+            --bg: #0f1219;
+            --surface: #1a1f2e;
+            --surface-2: #252b3d;
+            --text: #f0f3fa;
+            --text-2: #8e95b0;
+            --border: #2a3042;
+            --shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            padding: 16px;
+            transition: var(--transition);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, var(--accent), #7209b7);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .icon-btn {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            padding: 8px 16px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--text);
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .icon-btn:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        /* ===== STATS ===== */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 20px;
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .stat {
+            background: var(--surface-2);
+            padding: 10px 16px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat span {
+            font-weight: 700;
+            color: var(--accent);
+            font-size: 1.1rem;
+        }
+
+        .stat-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            color: var(--text-2);
+            letter-spacing: 0.5px;
+        }
+
+        .stat .progress-bar {
+            height: 4px;
+            background: var(--border);
+            border-radius: 10px;
+            margin-top: 6px;
+            overflow: hidden;
+        }
+
+        .stat .progress-bar .fill {
+            height: 100%;
+            background: var(--accent);
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--accent-2);
+            transform: translateY(-2px);
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: white;
+        }
+        .btn-success:hover {
+            background: #05b58a;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+        }
+        .btn-secondary:hover {
+            background: var(--border);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #d13a5e;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: var(--warning);
+            color: #1a1f2e;
+        }
+        .btn-warning:hover {
+            background: #e6c200;
+            transform: translateY(-2px);
+        }
+
+        .search-box {
+            display: flex;
+            gap: 10px;
+            flex: 1;
+            min-width: 200px;
+            max-width: 400px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            font-size: 0.85rem;
+            background: var(--surface);
+            color: var(--text);
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+
+        .filter-select {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            border-radius: 40px;
+            font-size: 0.8rem;
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* ===== TABLE ===== */
+        .table-container {
+            background: var(--surface);
+            border-radius: var(--radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+
+        .table-wrapper {
+            overflow-x: auto;
+            max-height: 65vh;
+            overflow-y: auto;
+        }
+
+        .table-container table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 700px;
+        }
+
+        .table-container th {
+            background: var(--surface-2);
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--text-2);
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            font-weight: 600;
+            cursor: pointer;
+            user-select: none;
+            transition: var(--transition);
+        }
+
+        .table-container th:hover {
+            background: var(--border);
+        }
+
+        .table-container th .sort-icon {
+            margin-left: 4px;
+            opacity: 0.5;
+        }
+
+        .table-container td {
+            padding: 10px 16px;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.85rem;
+            transition: var(--transition);
+            vertical-align: middle;
+        }
+
+        .table-container tr:hover td {
+            background: var(--surface-2);
+        }
+
+        .table-container tr:last-child td {
+            border-bottom: none;
+        }
+
+        .color-preview {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            vertical-align: middle;
+            margin-right: 10px;
+            border: 2px solid var(--border);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .color-preview:hover {
+            transform: scale(1.15);
+            border-color: var(--accent);
+        }
+
+        .code-copy {
+            cursor: pointer;
+            font-family: monospace;
+            padding: 2px 8px;
+            border-radius: 4px;
+            transition: var(--transition);
+        }
+
+        .code-copy:hover {
+            background: var(--accent);
+            color: white;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .badge-red { background: #ef476f22; color: #ef476f; }
+        .badge-green { background: #06d6a022; color: #06d6a0; }
+        .badge-blue { background: #4361ee22; color: #4361ee; }
+        .badge-yellow { background: #ffd16622; color: #cc9900; }
+        .badge-purple { background: #7209b722; color: #7209b7; }
+        .badge-gray { background: #8e95b022; color: #5a607a; }
+        .badge-orange { background: #ff9f4322; color: #e67e22; }
+
+        .action-btn {
+            padding: 4px 10px;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.65rem;
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            margin: 0 2px;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .action-btn.edit {
+            background: var(--accent);
+            color: white;
+        }
+
+        .action-btn.delete {
+            background: var(--error);
+            color: white;
+        }
+
+        .action-btn.duplicate {
+            background: var(--warning);
+            color: #1a1f2e;
+        }
+
+        /* ===== PAGINACIÓN ===== */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            padding: 16px;
+            flex-wrap: wrap;
+        }
+
+        .pagination button {
+            padding: 6px 14px;
+            border: 1px solid var(--border);
+            border-radius: 30px;
+            background: var(--surface);
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.75rem;
+        }
+
+        .pagination button:hover:not(:disabled) {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .pagination button.active {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .pagination .page-info {
+            font-size: 0.75rem;
+            color: var(--text-2);
+            padding: 0 8px;
+        }
+
+        .result-count {
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--text-2);
+            padding: 8px;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: modalIn 0.3s ease;
+        }
+
+        @keyframes modalIn {
+            from { opacity: 0; transform: scale(0.9) translateY(20px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .modal h2 {
+            margin-bottom: 20px;
+            color: var(--text);
+        }
+
+        .modal .form-group {
+            margin-bottom: 16px;
+        }
+
+        .modal .form-group label {
+            display: block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: var(--text-2);
+        }
+
+        .modal .form-group input,
+        .modal .form-group select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 0.9rem;
+            background: var(--surface);
+            color: var(--text);
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+        }
+
+        .modal .form-group input:focus,
+        .modal .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.15);
+        }
+
+        .modal .form-row {
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal .form-row .form-group {
+            flex: 1;
+        }
+
+        .modal .modal-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .modal .modal-actions .btn {
+            flex: 1;
+        }
+
+        .modal .color-preview-large {
+            width: 100%;
+            height: 60px;
+            border-radius: 12px;
+            border: 2px solid var(--border);
+            margin-top: 10px;
+            transition: background 0.1s;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            z-index: 2000;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .search-box { max-width: 100%; min-width: 100%; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .controls { flex-direction: column; align-items: stretch; }
+            .controls .btn { flex: 1; text-align: center; }
+            .header h1 { font-size: 1.4rem; }
+            .modal .form-row { flex-direction: column; }
+        }
+
+        @media (max-width: 480px) {
+            .stats { grid-template-columns: 1fr; }
+            .header { flex-direction: column; align-items: stretch; text-align: center; }
+            .header-actions { justify-content: center; }
+            .modal { padding: 20px; }
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--surface-2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- ===== HEADER ===== -->
+    <div class="header">
+        <h1>📚 Editor de Base de Datos · CHROMATIC</h1>
+        <div class="header-actions">
+            <button class="icon-btn" id="themeToggleBtn">🌙 MODO OSCURO</button>
+            <button class="icon-btn" onclick="openLink()">📖 Ver en circulo.html</button>
+            <button class="icon-btn" id="helpBtn">❓ AYUDA</button>
+        </div>
+    </div>
+
+    <!-- ===== STATS ===== -->
+    <div class="stats">
+        <div class="stat"><span id="totalColors">0</span><div class="stat-label">TOTAL COLORES</div></div>
+        <div class="stat"><span id="totalCategories">0</span><div class="stat-label">CATEGORÍAS</div></div>
+        <div class="stat"><span id="lastUpdate">-</span><div class="stat-label">ÚLTIMA ACTUALIZACIÓN</div></div>
+        <div class="stat"><span id="coveragePercent">0%</span><div class="stat-label">COBERTURA</div>
+            <div class="progress-bar"><div class="fill" id="coverageBar" style="width:0%"></div></div>
+        </div>
+    </div>
+
+    <!-- ===== CONTROLS ===== -->
+    <div class="controls">
+        <button class="btn btn-primary" onclick="loadData()">🔄 RECARGAR</button>
+        <button class="btn btn-success" onclick="showAddModal()">➕ NUEVO COLOR</button>
+        <button class="btn btn-warning" onclick="exportCSV()">📊 EXPORTAR CSV</button>
+        <button class="btn btn-success" onclick="exportData()">💾 EXPORTAR JSON</button>
+        <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()">📂 IMPORTAR JSON</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+        <button class="btn btn-secondary" onclick="findDuplicates()">🔍 DUPLICADOS</button>
+        <select id="categoryFilter" class="filter-select" onchange="applyFilters()">
+            <option value="">TODAS LAS CATEGORÍAS</option>
+        </select>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="🔍 Buscar por código, nombre o categoría..." oninput="applyFilters()">
+        </div>
+    </div>
+
+    <!-- ===== TABLE ===== -->
+    <div class="table-container">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th onclick="sortBy('code')" style="width:13%;">CÓDIGO <span class="sort-icon">↕</span></th>
+                        <th onclick="sortBy('color')" style="width:18%;">COLOR <span class="sort-icon">↕</span></th>
+                        <th onclick="sortBy('name')" style="width:32%;">NOMBRE <span class="sort-icon">↕</span></th>
+                        <th onclick="sortBy('category')" style="width:22%;">CATEGORÍA <span class="sort-icon">↕</span></th>
+                        <th style="width:15%;">ACCIONES</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-2);">Cargando datos...</td></tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="result-count" id="resultCount"></div>
+        <div class="pagination" id="pagination"></div>
+    </div>
+</div>
+
+<!-- ===== MODAL ===== -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <h2 id="modalTitle">➕ Nuevo Color</h2>
+        <form id="colorForm" onsubmit="saveColor(event)">
+            <div class="form-group">
+                <label>📛 Nombre del Color</label>
+                <input type="text" id="colorNameInput" placeholder="Ej: ROJO CADMIO" required>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>🔴 R</label>
+                    <input type="number" id="colorR" min="0" max="255" value="255" required>
+                </div>
+                <div class="form-group">
+                    <label>🟢 G</label>
+                    <input type="number" id="colorG" min="0" max="255" value="0" required>
+                </div>
+                <div class="form-group">
+                    <label>🔵 B</label>
+                    <input type="number" id="colorB" min="0" max="255" value="0" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>📂 Categoría</label>
+                <select id="colorCategory" required>
+                    <option value="ROJOS">ROJOS</option>
+                    <option value="NARANJAS">NARANJAS</option>
+                    <option value="AMARILLOS">AMARILLOS</option>
+                    <option value="VERDES">VERDES</option>
+                    <option value="AZULES">AZULES</option>
+                    <option value="PÚRPURAS">PÚRPURAS</option>
+                    <option value="MARRONES">MARRONES</option>
+                    <option value="GRISES">GRISES</option>
+                    <option value="BLANCOS">BLANCOS</option>
+                    <option value="NEGROS">NEGROS</option>
+                    <option value="ROSAS">ROSAS</option>
+                    <option value="CIANES">CIANES</option>
+                    <option value="LAVANDAS">LAVANDAS</option>
+                    <option value="NEONES">NEONES</option>
+                    <option value="METALICOS">METALICOS</option>
+                    <option value="MARCAS">MARCAS</option>
+                </select>
+            </div>
+            <div class="form-group" style="text-align:center;">
+                <div class="color-preview-large" id="colorPreviewLarge" style="background:#ff0000;"></div>
+                <div style="margin-top:8px; font-size:0.8rem;" id="colorInfo">#FF0000 · RGB(255,0,0)</div>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeModal()">CANCELAR</button>
+                <button type="submit" class="btn btn-primary" id="modalSubmitBtn">💾 GUARDAR</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    (function() {
+        'use strict';
+
+        // ==================== ESTADO ====================
+        let fullData = {};
+        let currentData = {};
+        let filteredData = [];
+        let currentPage = 1;
+        let pageSize = 50;
+        let sortField = 'name';
+        let sortDirection = 'asc';
+        let editingColor = null;
+
+        // ==================== DOM ====================
+        const tableBody = document.getElementById('tableBody');
+        const searchInput = document.getElementById('searchInput');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const resultCount = document.getElementById('resultCount');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const colorForm = document.getElementById('colorForm');
+        const colorNameInput = document.getElementById('colorNameInput');
+        const colorR = document.getElementById('colorR');
+        const colorG = document.getElementById('colorG');
+        const colorB = document.getElementById('colorB');
+        const colorCategory = document.getElementById('colorCategory');
+        const colorPreviewLarge = document.getElementById('colorPreviewLarge');
+        const colorInfo = document.getElementById('colorInfo');
+        const modalSubmitBtn = document.getElementById('modalSubmitBtn');
+
+        // ==================== PREVIEW COLOR ====================
+        function updatePreview() {
+            const r = parseInt(colorR.value) || 0;
+            const g = parseInt(colorG.value) || 0;
+            const b = parseInt(colorB.value) || 0;
+            const hex = '#' + [r, g, b].map(x => Math.min(255, Math.max(0, x)).toString(16).padStart(2, '0')).join('').toUpperCase();
+            colorPreviewLarge.style.background = hex;
+            colorInfo.textContent = `${hex} · RGB(${r},${g},${b})`;
+        }
+
+        colorR.addEventListener('input', updatePreview);
+        colorG.addEventListener('input', updatePreview);
+        colorB.addEventListener('input', updatePreview);
+
+        // ==================== MODAL ====================
+        function showAddModal() {
+            editingColor = null;
+            modalTitle.textContent = '➕ Nuevo Color';
+            modalSubmitBtn.textContent = '💾 GUARDAR';
+            colorForm.reset();
+            colorR.value = 255;
+            colorG.value = 0;
+            colorB.value = 0;
+            colorNameInput.value = '';
+            updatePreview();
+            modalOverlay.classList.add('active');
+            setTimeout(() => colorNameInput.focus(), 100);
+        }
+
+        function showEditModal(category, code, name, r, g, b) {
+            editingColor = { category, code };
+            modalTitle.textContent = '✏️ Editar Color';
+            modalSubmitBtn.textContent = '💾 ACTUALIZAR';
+            colorNameInput.value = name;
+            colorR.value = r;
+            colorG.value = g;
+            colorB.value = b;
+            colorCategory.value = category;
+            updatePreview();
+            modalOverlay.classList.add('active');
+            setTimeout(() => colorNameInput.focus(), 100);
+        }
+
+        function showDuplicateModal(category, code, name, r, g, b) {
+            editingColor = null;
+            modalTitle.textContent = '📋 Duplicar Color';
+            modalSubmitBtn.textContent = '💾 GUARDAR COPIA';
+            colorNameInput.value = name + ' (COPIA)';
+            colorR.value = r;
+            colorG.value = g;
+            colorB.value = b;
+            colorCategory.value = category;
+            updatePreview();
+            modalOverlay.classList.add('active');
+            setTimeout(() => colorNameInput.focus(), 100);
+            colorNameInput.select();
+        }
+
+        function closeModal() {
+            modalOverlay.classList.remove('active');
+            editingColor = null;
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeModal();
+            if (e.ctrlKey && e.key === 'n') { e.preventDefault(); showAddModal(); }
+            if (e.ctrlKey && e.key === 'f') { e.preventDefault(); searchInput.focus(); }
+        });
+
+        modalOverlay.addEventListener('click', (e) => {
+            if (e.target === modalOverlay) closeModal();
+        });
+
+        // ==================== GUARDAR COLOR ====================
+        function saveColor(e) {
+            e.preventDefault();
+            const name = colorNameInput.value.trim().toUpperCase();
+            const r = parseInt(colorR.value);
+            const g = parseInt(colorG.value);
+            const b = parseInt(colorB.value);
+            const category = colorCategory.value;
+
+            if (!name) { showToast('❌ El nombre es obligatorio'); return; }
+            if (isNaN(r) || isNaN(g) || isNaN(b)) { showToast('❌ Valores RGB inválidos'); return; }
+            if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255) {
+                showToast('❌ Los valores RGB deben estar entre 0 y 255');
+                return;
+            }
+
+            const code = `${r},${g},${b}`;
+
+            if (!editingColor) {
+                if (currentData.colors[category] && currentData.colors[category][code]) {
+                    if (!confirm(`⚠️ El color "${currentData.colors[category][code]}" ya existe con este código. ¿Desea sobrescribirlo?`)) {
+                        return;
+                    }
+                }
+            }
+
+            if (editingColor) {
+                if (currentData.colors[editingColor.category]) {
+                    delete currentData.colors[editingColor.category][editingColor.code];
+                }
+            }
+
+            if (!currentData.colors[category]) {
+                currentData.colors[category] = {};
+            }
+            currentData.colors[category][code] = name;
+            currentData.lastUpdate = new Date().toISOString().slice(0, 10);
+
+            showToast(editingColor ? '✅ Color actualizado' : '✅ Color añadido');
+            closeModal();
+            applyFilters();
+            updateStats();
+            autoSave();
+        }
+
+        // ==================== ELIMINAR COLOR ====================
+        function deleteColor(category, code, name) {
+            if (!confirm(`¿Eliminar "${name}" (${code})?`)) return;
+
+            if (currentData.colors[category]) {
+                delete currentData.colors[category][code];
+                if (Object.keys(currentData.colors[category]).length === 0) {
+                    delete currentData.colors[category];
+                }
+                currentData.lastUpdate = new Date().toISOString().slice(0, 10);
+                showToast(`🗑️ "${name}" eliminado`);
+                applyFilters();
+                updateStats();
+                autoSave();
+            }
+        }
+
+        // ==================== DUPLICADOS ====================
+        function findDuplicates() {
+            const colorMap = {};
+            const duplicates = [];
+            for (const [cat, colors] of Object.entries(currentData.colors || {})) {
+                for (const [code, name] of Object.entries(colors)) {
+                    const key = code;
+                    if (colorMap[key]) {
+                        duplicates.push({ code, name, category: cat, existing: colorMap[key] });
+                    } else {
+                        colorMap[key] = { name, category: cat };
+                    }
+                }
+            }
+            if (duplicates.length === 0) {
+                showToast('✅ No se encontraron colores duplicados');
+                return;
+            }
+            let msg = `🔍 Encontrados ${duplicates.length} duplicados:\n`;
+            duplicates.forEach(d => {
+                msg += `• ${d.code} - "${d.name}" (${d.category}) ya existe como "${d.existing.name}" (${d.existing.category})\n`;
+            });
+            alert(msg);
+        }
+
+        // ==================== AUTO GUARDAR ====================
+        function autoSave() {
+            const data = {
+                version: currentData.version || '2.0',
+                lastUpdate: currentData.lastUpdate,
+                totalColors: Object.values(currentData.colors || {}).reduce((acc, c) => acc + Object.keys(c).length, 0),
+                colors: currentData.colors
+            };
+            localStorage.setItem('chromatica_bd_backup', JSON.stringify(data));
+        }
+
+        // ==================== CARGAR DATOS ====================
+        async function loadData() {
+            try {
+                const response = await fetch('colores.json?t=' + Date.now());
+                if (!response.ok) throw new Error('No se pudo cargar la base de datos');
+                fullData = await response.json();
+                currentData = fullData;
+                populateCategoryFilter();
+                applyFilters();
+                updateStats();
+                showToast('✅ Datos cargados correctamente');
+            } catch (error) {
+                console.error(error);
+                const backup = localStorage.getItem('chromatica_bd_backup');
+                if (backup) {
+                    try {
+                        currentData = JSON.parse(backup);
+                        fullData = currentData;
+                        populateCategoryFilter();
+                        applyFilters();
+                        updateStats();
+                        showToast('📂 Datos cargados desde backup local');
+                    } catch (e) {
+                        showToast('❌ Error cargando la base de datos');
+                    }
+                } else {
+                    showToast('❌ Error cargando la base de datos');
+                }
+            }
+        }
+
+        // ==================== FILTROS ====================
+        function populateCategoryFilter() {
+            const categories = Object.keys(currentData.colors || {});
+            const currentValue = categoryFilter.value;
+            categoryFilter.innerHTML = '<option value="">TODAS LAS CATEGORÍAS</option>';
+            categories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                categoryFilter.appendChild(opt);
+            });
+            if (currentValue && categories.includes(currentValue)) {
+                categoryFilter.value = currentValue;
+            }
+        }
+
+        function applyFilters() {
+            const search = searchInput.value.toLowerCase().trim();
+            const category = categoryFilter.value;
+
+            filteredData = [];
+            for (const [cat, colors] of Object.entries(currentData.colors || {})) {
+                if (category && cat !== category) continue;
+                for (const [code, name] of Object.entries(colors)) {
+                    const searchable = `${code} ${name} ${cat}`.toLowerCase();
+                    if (!search || searchable.includes(search)) {
+                        filteredData.push({ code, name, category: cat });
+                    }
+                }
+            }
+
+            filteredData.sort((a, b) => {
+                let valA = a[sortField] || '';
+                let valB = b[sortField] || '';
+                if (sortField === 'code') {
+                    const [r1, g1, b1] = a.code.split(',').map(Number);
+                    const [r2, g2, b2] = b.code.split(',').map(Number);
+                    valA = r1 + g1 + b1;
+                    valB = r2 + g2 + b2;
+                }
+                if (typeof valA === 'string') valA = valA.toLowerCase();
+                if (typeof valB === 'string') valB = valB.toLowerCase();
+                if (valA < valB) return sortDirection === 'asc' ? -1 : 1;
+                if (valA > valB) return sortDirection === 'asc' ? 1 : -1;
+                return 0;
+            });
+
+            currentPage = 1;
+            renderTable();
+        }
+
+        // ==================== SORT ====================
+        function sortBy(field) {
+            if (sortField === field) {
+                sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
+            } else {
+                sortField = field;
+                sortDirection = 'asc';
+            }
+            applyFilters();
+            const headers = document.querySelectorAll('th');
+            const index = ['code', 'color', 'name', 'category'].indexOf(field);
+            if (index !== -1 && headers[index]) {
+                headers[index].style.color = 'var(--accent)';
+            }
+        }
+
+        // ==================== RENDER ====================
+        function renderTable() {
+            const start = (currentPage - 1) * pageSize;
+            const end = Math.min(start + pageSize, filteredData.length);
+            const pageData = filteredData.slice(start, end);
+
+            if (filteredData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--text-2);">🔍 No se encontraron resultados</td></tr>';
+                resultCount.textContent = '';
+                document.getElementById('pagination').innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            pageData.forEach(item => {
+                const [r, g, b] = item.code.split(',').map(Number);
+                const hex = '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
+                const categoryBadge = getCategoryBadge(item.category);
+
+                html += `
+                    <tr>
+                        <td><span class="code-copy" onclick="copyCode('${item.code}')" title="Clic para copiar">${item.code}</span></td>
+                        <td>
+                            <span class="color-preview" style="background:${hex};" onclick="copyCode('${hex}')" title="Clic para copiar HEX"></span>
+                            <span class="code-copy" onclick="copyCode('${hex}')" title="Clic para copiar HEX">${hex}</span>
+                        </td>
+                        <td><strong>${item.name}</strong></td>
+                        <td><span class="badge ${categoryBadge}">${item.category}</span></td>
+                        <td>
+                            <button class="action-btn edit" onclick="showEditModal('${item.category}','${item.code}','${item.name}',${r},${g},${b})" title="Editar">✏️</button>
+                            <button class="action-btn duplicate" onclick="showDuplicateModal('${item.category}','${item.code}','${item.name}',${r},${g},${b})" title="Duplicar">📋</button>
+                            <button class="action-btn delete" onclick="deleteColor('${item.category}','${item.code}','${item.name}')" title="Eliminar">🗑️</button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            tableBody.innerHTML = html;
+            resultCount.textContent = `📊 Mostrando ${filteredData.length} colores (página ${currentPage} de ${Math.ceil(filteredData.length / pageSize)})`;
+            renderPagination();
+        }
+
+        // ==================== PAGINACIÓN ====================
+        function renderPagination() {
+            const totalPages = Math.ceil(filteredData.length / pageSize);
+            const pagination = document.getElementById('pagination');
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            html += `<button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>◀</button>`;
+
+            const maxButtons = 5;
+            let startPage = Math.max(1, currentPage - Math.floor(maxButtons / 2));
+            let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+            if (endPage - startPage < maxButtons - 1) startPage = Math.max(1, endPage - maxButtons + 1);
+
+            if (startPage > 1) {
+                html += `<button onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) html += `<button disabled>…</button>`;
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) html += `<button disabled>…</button>`;
+                html += `<button onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+
+            html += `<button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>▶</button>`;
+            pagination.innerHTML = html;
+        }
+
+        // ==================== NAVEGACIÓN ====================
+        function goToPage(page) {
+            const totalPages = Math.ceil(filteredData.length / pageSize);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderTable();
+        }
+
+        // ==================== CATEGORY BADGE ====================
+        function getCategoryBadge(category) {
+            const map = {
+                'ROJOS': 'badge-red',
+                'NARANJAS': 'badge-orange',
+                'AMARILLOS': 'badge-yellow',
+                'VERDES': 'badge-green',
+                'AZULES': 'badge-blue',
+                'PÚRPURAS': 'badge-purple',
+                'MARRONES': 'badge-orange',
+                'GRISES': 'badge-gray',
+                'BLANCOS': 'badge-gray',
+                'NEGROS': 'badge-gray',
+                'ROSAS': 'badge-red',
+                'CIANES': 'badge-green',
+                'LAVANDAS': 'badge-purple',
+                'NEONES': 'badge-green',
+                'METALICOS': 'badge-gray',
+                'MARCAS': 'badge-blue'
+            };
+            return map[category] || 'badge-blue';
+        }
+
+        // ==================== COPIAR ====================
+        function copyCode(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`📋 Copiado: ${text}`);
+            }).catch(() => {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                document.body.appendChild(textarea);
+                textarea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textarea);
+                showToast(`📋 Copiado: ${text}`);
+            });
+        }
+
+        // ==================== ESTADÍSTICAS ====================
+        function updateStats() {
+            const colors = currentData.colors || {};
+            const categories = Object.keys(colors);
+            let total = 0;
+            for (const cat of categories) {
+                total += Object.keys(colors[cat]).length;
+            }
+
+            document.getElementById('totalColors').textContent = total;
+            document.getElementById('totalCategories').textContent = categories.length;
+            document.getElementById('lastUpdate').textContent = currentData.lastUpdate || '-';
+
+            // Cobertura (asumiendo 5000 como máximo)
+            const maxColors = 5000;
+            const coverage = Math.min(100, (total / maxColors) * 100);
+            document.getElementById('coveragePercent').textContent = Math.round(coverage) + '%';
+            document.getElementById('coverageBar').style.width = coverage + '%';
+        }
+
+        // ==================== EXPORTAR CSV ====================
+        function exportCSV() {
+            let csv = 'Código RGB,Hex,Nombre,Categoría\n';
+            for (const [cat, colors] of Object.entries(currentData.colors || {})) {
+                for (const [code, name] of Object.entries(colors)) {
+                    const [r, g, b] = code.split(',').map(Number);
+                    const hex = '#' + [r, g, b].map(x => x.toString(16).padStart(2, '0')).join('').toUpperCase();
+                    csv += `${code},${hex},${name},${cat}\n`;
+                }
+            }
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.download = `colores_${new Date().toISOString().slice(0, 10)}.csv`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            showToast('📊 CSV exportado');
+        }
+
+        // ==================== EXPORTAR JSON ====================
+        function exportData() {
+            const data = {
+                version: currentData.version || '2.0',
+                lastUpdate: new Date().toISOString().slice(0, 10),
+                totalColors: Object.values(currentData.colors || {}).reduce((acc, c) => acc + Object.keys(c).length, 0),
+                colors: currentData.colors
+            };
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const link = document.createElement('a');
+            link.download = `colores_${new Date().toISOString().slice(0, 10)}.json`;
+            link.href = URL.createObjectURL(blob);
+            link.click();
+            showToast('💾 Datos exportados');
+        }
+
+        // ==================== IMPORTAR ====================
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    if (data.colors) {
+                        fullData = data;
+                        currentData = data;
+                        populateCategoryFilter();
+                        applyFilters();
+                        updateStats();
+                        showToast('📂 Datos importados correctamente');
+                        autoSave();
+                    } else {
+                        showToast('❌ Formato de archivo inválido');
+                    }
+                } catch (err) {
+                    showToast('❌ Error al importar: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = '';
+        }
+
+        // ==================== ABRIR CIRCULO ====================
+        function openLink() {
+            window.open('circulo.html', '_blank');
+        }
+
+        // ==================== TOAST ====================
+        function showToast(msg) {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+
+            const t = document.createElement('div');
+            t.className = 'toast';
+            t.textContent = msg;
+            document.body.appendChild(t);
+            setTimeout(() => t.remove(), 2500);
+        }
+
+        // ==================== HELP ====================
+        document.getElementById('helpBtn').addEventListener('click', function() {
+            alert(
+                '📚 GUÍA RÁPIDA\n\n' +
+                '🔍 Buscar: Ctrl+F\n' +
+                '➕ Nuevo color: Ctrl+N\n' +
+                '✏️ Editar: Botón ✏️ en cada fila\n' +
+                '📋 Duplicar: Botón 📋 en cada fila\n' +
+                '🗑️ Eliminar: Botón 🗑️ en cada fila\n\n' +
+                '📊 Exportar: CSV o JSON\n' +
+                '📂 Importar: Archivo JSON\n' +
+                '🔍 Duplicados: Busca colores repetidos\n\n' +
+                '🌙 Modo oscuro: Alternar tema'
+            );
+        });
+
+        // ==================== MODO OSCURO ====================
+        document.getElementById('themeToggleBtn').addEventListener('click', function() {
+            document.body.classList.toggle('dark');
+            localStorage.setItem('chromatica_bd_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        // ==================== INICIO ====================
+        const savedTheme = localStorage.getItem('chromatica_bd_theme');
+        if (savedTheme === 'dark') document.body.classList.add('dark');
+
+        window.copyCode = copyCode;
+        window.goToPage = goToPage;
+        window.showAddModal = showAddModal;
+        window.showEditModal = showEditModal;
+        window.showDuplicateModal = showDuplicateModal;
+        window.deleteColor = deleteColor;
+        window.sortBy = sortBy;
+        window.exportCSV = exportCSV;
+        window.exportData = exportData;
+        window.importData = importData;
+        window.loadData = loadData;
+        window.openLink = openLink;
+        window.closeModal = closeModal;
+        window.saveColor = saveColor;
+        window.findDuplicates = findDuplicates;
+
+        loadData();
+    })();
+</script>
+</body>
+</html>
